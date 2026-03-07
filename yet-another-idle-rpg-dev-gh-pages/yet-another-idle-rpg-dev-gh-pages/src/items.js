@@ -44,11 +44,11 @@ import { is_rat } from "./character.js";
 const rarity_multipliers = {
     trash: 1, //low quality alone makes these so bad that no additional nerf should be needed
     common: 1,
-    uncommon: 1.1,
-    rare: 1.3,
-    epic: 1.6,
-    legendary: 2,
-    mythical: 2.5
+    uncommon: 1,
+    rare: 1,
+    epic: 1,
+    legendary: 1,
+    mythical: 1
 };
 
 const item_templates = {};
@@ -80,7 +80,7 @@ function getItemRarity(quality) {
     else if(quality < 160) rarity = "rare";
     else if(quality < 200) rarity = "epic";
     else if(quality < 246) rarity = "legendary";
-    else rarity = "mythical";
+    else rarity = "holy";
     
     return rarity;
 }
@@ -101,7 +101,8 @@ class Item {
                 market_saturation_group,
                 saturates_market,
                 material_type = null,
-                quality = null,
+                set_quality = null,
+				rarity,
                 id = null, //passed only on loading, no need to provide it when creating new item objects as it will be filled automatically in that case
                 components = null,
                 getName = ()=>{return this.name},
@@ -116,8 +117,10 @@ class Item {
         this.saturates_market = saturates_market ?? true;
 
         this.material_type = material_type;
-
-        this.quality = quality;
+		
+        this.quality = set_quality;
+		this.rarity = rarity
+		this.set_quality = null
         this.components = components; //meaningless unless it's an equippable that's /meant/ to have components
 
         /**
@@ -241,6 +244,7 @@ class ItemComponent extends Item {
         this.item_type = "COMPONENT";
         this.component_tier = item_data.component_tier || 1;
         this.component_stats = item_data.component_stats || {};
+        this.component_bonus_skill_levels = item_data.component_bonus_skill_levels || {};
         this.tags["component"] = true;
         this.quality = Math.round(item_data.quality) || 100;
     }
@@ -264,7 +268,7 @@ class ItemComponent extends Item {
         else if(quality < 160) rarity = "rare";
         else if(quality < 200) rarity = "epic";
         else if(quality < 246) rarity = "legendary";
-        else rarity = "mythical";
+        else rarity = "holy";
         
         return rarity;
     }
@@ -272,15 +276,27 @@ class ItemComponent extends Item {
     getStats() {
         return this.component_stats;
     }
+
+    getBonusSkillLevels() {
+		this.bonus_skill_levels = item_data.bonus_skill_levels
+        return this.component_bonus_skill_levels;
+    }
+
 }
 
 class WeaponComponent extends ItemComponent {
     constructor(item_data) {
         super(item_data);
-        if(item_data.component_type !== "axe head" && item_data.component_type !== "hammer head"
-        && item_data.component_type !== "short blade" && item_data.component_type !== "long blade"
-        && item_data.component_type !== "short handle" && item_data.component_type !== "long handle"
-        && item_data.component_type !== "medium handle") {
+        if(item_data.component_type !== "sword" && item_data.component_type !== "spear"
+        && item_data.component_type !== "axe" && item_data.component_type !== "bow"
+        && item_data.component_type !== "fire tome" && item_data.component_type !== "thunder tome"
+        && item_data.component_type !== "wind tome" && item_data.component_type !== "other"
+		&& item_data.component_type !== "forge" && item_data.component_type !== "short handle"
+		&& item_data.component_type !== "medium handle" && item_data.component_type !== "long handle"
+		&& item_data.component_type !== "dark tome" && item_data.component_type !== "light tome"
+		&& item_data.component_type !== "blade" && item_data.component_type !== "axe head"
+		&& item_data.component_type !== "spear tip" && item_data.component_type !== "bowstring"
+		&& item_data.component_type !== "bow grip") {
             throw new Error(`No such weapon component type as ${item_data.component_type}`);
         }
         this.component_type = item_data.component_type;
@@ -288,14 +304,14 @@ class WeaponComponent extends ItemComponent {
 
 
         this.attack_value = item_data.attack_value || 0; //can skip this for weapon handles
-        if(item_data.component_type === "short handle"){
+        if(item_data.component_type === "forge"){
             this.attack_multiplier = 1;
             this.market_saturation_group = {group_key: group_key_prefix+"handle", group_tier: this.component_tier-1};
-        } else if(item_data.component_type === "medium handle"){
+        } else if(item_data.component_type === "forge"){
             this.attack_multiplier = 1;
             this.market_saturation_group = {group_key: group_key_prefix+"handle", group_tier: this.component_tier-1};
-        } else if(item_data.component_type === "long handle"){
-            this.attack_multiplier = 1.5;
+        } else if(item_data.component_type === "forge"){
+            this.attack_multiplier = 1;
             this.market_saturation_group = {group_key: group_key_prefix+"handle", group_tier: this.component_tier-1};
         } else {
             this.attack_multiplier = 1;
@@ -382,7 +398,7 @@ class Equippable extends Item {
     constructor(item_data) {
         super(item_data);
         this.item_type = "EQUIPPABLE";
-        this.bonus_skill_levels = item_data.bonus_skill_levels || {};
+        this.base_bonus_skill_levels = item_data.base_bonus_skill_levels;
 
         this.quality = Math.round(Number(item_data.quality)) || 100;
 
@@ -496,10 +512,54 @@ class Equippable extends Item {
 
         return stats;
     }
-
-    getBonusSkillLevels() {
-        return this.bonus_skill_levels;
+	    getBonusSkillLevels(quality) {
+        if(!quality) {
+            if(!this.bonus_skill_levels) {
+                this.bonus_skill_levels = this.calculateBonusSkillLevels(this.quality);
+            }
+            return this.bonus_skill_levels;
+        } else {
+            return this.calculateBonusSkillLevels(quality);
+        }
     }
+
+    calculateBonusSkillLevels(quality) {
+        let skill_bonus = {};
+
+        if(this.components) {
+            //iterate over components
+            const components = Object.values(this.components).map(comp => item_templates[comp]).filter(comp => comp);
+            for(let i = 0; i < components.length; i++) {
+                Object.keys(components[i].component_bonus_skill_levels).forEach(skill => {
+                    skill_bonus[skill] = (skill_bonus[skill] || 0) + components[i].component_bonus_skill_levels[skill];
+                });
+            }
+
+            //iterate over stats and apply rarity bonus if possible
+            Object.keys(skill_bonus).forEach(skill => {
+                if(skill_bonus[skill]){
+                    if(skill_bonus[skill] > 0) {
+                        skill_bonus[skill] = Math.round(skill_bonus[skill] * rarity_multipliers[this.getRarity(quality)]);
+                    } else {
+                        skill_bonus[skill] = Math.round(skill_bonus[skill]);
+                    }
+                }
+            });
+        } else { //no components, only needs to apply quality to already present stats
+            if( this.base_bonus_skill_levels) console.log(this, item_templates[this.id]);
+            
+            const used_bonus = this.component_bonus_skill_levels || this.base_bonus_skill_levels || {};
+            Object.keys(used_bonus).forEach(skill => {
+                if(used_bonus[skill] > 0) {
+                    skill_bonus[skill] = Math.round(used_bonus[skill] * rarity_multipliers[this.getRarity(quality)]);
+                } else {
+                    skill_bonus[skill] = Math.round(used_bonus[skill]);
+                }
+            });
+        }
+
+        return skill_bonus;
+	}
 }
 
 class Artifact extends Equippable {
@@ -530,9 +590,6 @@ class Tool extends Equippable {
         if(!this.id) {
             this.id = this.getName();
         }
-    }
-    getStats() {
-        return {};
     }
 }
 
@@ -632,6 +689,7 @@ class Armor extends Equippable {
             this.tags["armor component"] = true;
             this.tags["clothing"] = true;
             this.component_stats = item_data.component_stats || {};
+			this.component_bonus_skill_levels = item_data.component_bonus_skill_levels || {};
             delete this.components;
             
             if(!item_data.name) {
@@ -730,31 +788,44 @@ class Weapon extends Equippable {
         }
         this.components.handle = item_data.components.handle; //only the name
 
-        if(item_templates[this.components.handle].component_type === "long handle" 
-        && (item_templates[this.components.head].component_type === "short blade" || item_templates[this.components.head].component_type === "long blade")) {
+        if(item_templates[this.components.handle].component_type === "forge" 
+        && item_templates[this.components.head].component_type === "spear") {
             //long handle + short/long blade = spear
             this.weapon_type = "spear";
-        } else if(item_templates[this.components.handle].component_type === "medium handle" 
-        && item_templates[this.components.head].component_type === "axe head") {
+        } else if(item_templates[this.components.handle].component_type === "forge" 
+        && item_templates[this.components.head].component_type === "axe") {
             //medium handle + axe head = axe
             this.weapon_type = "axe";
-        } else if(item_templates[this.components.handle].component_type === "medium handle" 
-        && item_templates[this.components.head].component_type === "hammer head") {
+        } else if(item_templates[this.components.handle].component_type === "forge" 
+        && item_templates[this.components.head].component_type === "other") {
             //medium handle + hammer head = hammer
-            this.weapon_type = "hammer";
-        } else if(item_templates[this.components.handle].component_type === "short handle" 
-        && item_templates[this.components.head].component_type === "short blade") {
+            this.weapon_type = "axe";
+        } else if(item_templates[this.components.handle].component_type === "forge" 
+        && item_templates[this.components.head].component_type === "bow") {
             //short handle + short blade = dagger
-            this.weapon_type = "dagger";
+            this.weapon_type = "bow";
         } else if(item_templates[this.components.handle].component_type === "short handle" 
-        && item_templates[this.components.head].component_type === "long blade") {
+        && item_templates[this.components.head].component_type === "blade") {
             //short handle + long blade = sword
             this.weapon_type = "sword";
+        } else if(item_templates[this.components.handle].component_type === "medium handle" 
+        && item_templates[this.components.head].component_type === "axe head") {
+            //short handle + short blade = dagger
+            this.weapon_type = "axe";
+        } else if(item_templates[this.components.handle].component_type === "long handle" 
+        && item_templates[this.components.head].component_type === "spear tip") {
+            //short handle + short blade = dagger
+            this.weapon_type = "spear";
+        } else if(item_templates[this.components.handle].component_type === "bowstring" 
+        && item_templates[this.components.head].component_type === "bow grip") {
+            //short handle + short blade = dagger
+            this.weapon_type = "bow";
         } else {
             throw new Error(`Combination of elements of types ${item_templates[this.components.handle].component_type} and ${item_templates[this.components.head].component_type} does not exist!`);
         }
 
         this.tags["weapon"] = true;
+        this.component_bonus_skill_levels = item_data.component_bonus_skill_levels || {};
         this.tags[this.weapon_type] = true;
         if(!this.id) {
             this.id = this.getName();
@@ -836,12 +907,12 @@ class Cape extends Equippable {
 class Amulet extends Equippable {
     constructor(item_data) {
         super(item_data);
-        this.equip_slot = "amulet";
+        this.equip_slot = "class";
         this.stats = item_data.stats;
 
         this.ignore_quality = true;
 
-        this.tags["amulet"] = true;
+        this.tags["class"] = true;
         if(!this.id) {
             this.id = this.getName();
         }
@@ -942,7 +1013,7 @@ function getItem(item_data) {
                     return new Tool(item_data);
                 case "cape":
                     return new Cape(item_data);
-                case "amulet":
+                case "class":
                     return new Amulet(item_data);
                 default:
                     return new Armor(item_data);
@@ -1541,23 +1612,120 @@ book_stats["A Glint On The Sand"] = new BookData({
 
 //weapon components:
 (function(){
-    item_templates["Cheap short iron blade"] = new WeaponComponent({
-        name: "Cheap short iron blade", description: "Crude blade made of iron. Perfect length for a dagger, but could be also used for a spear",
+    item_templates["PlaceholderSpear"] = new WeaponComponent({
+        name: "Wooden spear tip", description: "Simple spear tip made out of wood, perfect for training",
+        component_type: "spear tip",
+        value: 0,
+        component_tier: 1,
+        name_prefix: "Training",
+		set_quality: 100,
+        attack_value: 4,
+        component_bonus_skill_levels: {
+            "Triangle vs Sword": 2,
+			"Triangle vs Axe": -2,
+        }
+    });
+    item_templates["PlaceholderAxe"] = new WeaponComponent({
+        name: "Wooden axe head", description: "Simple axe head made out of wood, suitable for practicing",
+        component_type: "axe head",
+        value: 0,
+        name_prefix: "Training",
+		set_quality: 100,		
+        component_tier: 1,
+        attack_value: 5,
+        component_stats: {
+            attack_speed: {
+                multiplier: 0.95,
+            },
+            attack_points: {
+                multiplier: 0.95,
+            }
+        },
+        component_bonus_skill_levels: {
+            "Triangle vs Spear": 2,
+			"Triangle vs Sword": -2,
+        }
+    });
+    item_templates["PlaceholderHammer"] = new WeaponComponent({
+        name: "Nothing", description: "What?!",
+        component_type: "other",
+        value: 0,
+        component_tier: 1,
+    });
+    item_templates["PlaceholderBow"] = new WeaponComponent({
+        name: "Wooden bow grip", description: "Simple bow grip made out of wood, good for honing your skills",
+        component_type: "bow grip",
+        value: 0,
+        name_prefix: "Training",
+		set_quality: 100,
+        component_tier: 1,
+        attack_value: 4
+    });
+    item_templates["PlaceholderSword"] = new WeaponComponent({
+        name: "Wooden blade", description: "Simple blade made out of wood, excellent for sparring",
+        component_type: "blade",
+        value: 0,
+        name_prefix: "Training",
+		set_quality: 100,
+        component_tier: 1,
+        attack_value: 3,
+        component_stats: {
+            attack_speed: {
+                multiplier: 1.05,
+            },
+            attack_points: {
+                multiplier: 1.05,
+            }
+        },
+        component_bonus_skill_levels: {
+            "Triangle vs Axe": 2,
+			"Triangle vs Spear": -2,
+        }
+    });
+    item_templates["PlaceholderForge"] = new WeaponComponent({
+        name: "Nothing", description: "What?!",
+        component_type: "forge",
+        value: 0,
+        component_tier: 1,
+    });
+    item_templates["Simple short hilt"] = new WeaponComponent({
+        name: "Simple short hilt", description: "A short handle suitable for a sword",
+        component_type: "short handle",
+        value: 8,
+		set_quality: 100,
+        component_tier: 1,
+    });
+    item_templates["Simple bowstring"] = new WeaponComponent({
+        name: "Simple bowstring", description: "A bowstring made for...a bow",
+        component_type: "bowstring",
+        value: 12,
+		set_quality: 100,
+        component_tier: 1,
+    });
+    item_templates["Simple medium handle"] = new WeaponComponent({
+        name: "Simple medium handle", description: "A medium handle that could be used for an axe",
+        component_type: "medium handle",
+        value: 16,
+		set_quality: 100,
+        component_tier: 1,
+    });
+    item_templates["Simple long shaft"] = new WeaponComponent({
+        name: "Simple long shaft", description: "A long shaft made for a spear",
+        component_type: "long handle",
+        value: 20,
+		set_quality: 100,
+        component_tier: 1,
+    });
+    /*item_templates["Cheap short iron blade"] = new WeaponComponent({
+        name: "Training spear tip", description: "A pointy spear tip made out of wood, perfect for sparring.",
         component_type: "short blade",
         value: 70,
         component_tier: 1,
-        name_prefix: "Cheap iron",
-        attack_value: 5,
-        component_stats: {
-            crit_rate: {
-                flat: 0.06,
-            },
-            attack_speed: {
-                multiplier: 1.20,
-            },
-            evasion_points: {
-                multiplier: 1.05,
-            }
+        name_prefix: "Training",
+        attack_value: 4,
+        component_bonus_skill_levels: {
+            "Triangle vs Sword": 2,
+			"Triangle vs Axe": -2,
         }
     });
     item_templates["Short iron blade"] = new WeaponComponent({
@@ -1599,73 +1767,75 @@ book_stats["A Glint On The Sand"] = new BookData({
         }
     });
     item_templates["Cheap long iron blade"] = new WeaponComponent({
-        name: "Cheap long iron blade", description: "Crude blade made of iron, with a perfect length for a sword",
+        name: "Training blade", description: "A rather blunt wooden blade, made for sparring with a sword.",
         component_type: "long blade",
         value: 100,
-        name_prefix: "Cheap iron",
+        name_prefix: "Training",
         component_tier: 1,
-        attack_value: 8,
+        attack_value: 3,
         component_stats: {
             attack_speed: {
-                multiplier: 1.10,
-            },
-            crit_rate: {
-                flat: 0.02,
+                multiplier: 1.05,
             },
             attack_points: {
                 multiplier: 1.05,
             }
+        },
+        component_bonus_skill_levels: {
+            "Triangle vs Axe": 2,
+			"Triangle vs Spear": -2,
         }
     });
     item_templates["Long iron blade"] = new WeaponComponent({
-        name: "Long iron blade", description: "Good blade made of iron, with a perfect length for a sword",
+        name: "Bronze blade", description: "A blade made out of bronze. Suitable for sword combat.",
         component_type: "long blade",
         value: 210,
-        name_prefix: "Iron",
+        name_prefix: "Bronze",
         component_tier: 2,
-        attack_value: 13,
+        attack_value: 5,
         component_stats: {
             attack_speed: {
-                multiplier: 1.15,
-            },
-            crit_rate: {
-                flat: 0.04,
+                multiplier: 1.10,
             },
             attack_points: {
-                multiplier: 1.13,
+                multiplier: 1.10,
             }
         }
     });
     item_templates["Long steel blade"] = new WeaponComponent({
-        name: "Long steel blade", description: "Good blade made of steel, with a perfect length for a sword",
+        name: "Iron blade", description: "A blade made out of iron, perfect for a sword.",
         component_type: "long blade",
         value: 310,
-        name_prefix: "Steel",
+        name_prefix: "Iron",
         component_tier: 3,
         attack_value: 18,
         component_stats: {
             attack_speed: {
-                multiplier: 1.2,
-            },
-            crit_rate: {
-                flat: 0.05,
+                multiplier: 1.15,
             },
             attack_points: {
-                multiplier: 1.2,
+                multiplier: 1.15,
             }
         }
     });
     item_templates["Cheap iron axe head"] = new WeaponComponent({
-        name: "Cheap iron axe head", description: "A heavy axe head made of low quality iron",
+        name: "Training axe head", description: "A blunt wooden axe head, made for practicing strikes.",
         component_type: "axe head",
         value: 100,
-        name_prefix: "Cheap iron",
+        name_prefix: "Training",
         component_tier: 1,
-        attack_value: 10,
+        attack_value: 5,
         component_stats: {
             attack_speed: {
-                multiplier: 0.9,
+                multiplier: 0.95,
+            },
+            attack_points: {
+                multiplier: 0.95,
             }
+        },
+        component_bonus_skill_levels: {
+            "Triangle vs Spear": 2,
+			"Triangle vs Sword": -2,
         }
     });
     item_templates["Iron axe head"] = new WeaponComponent({
@@ -1690,17 +1860,12 @@ book_stats["A Glint On The Sand"] = new BookData({
         attack_value: 22,
     });
     item_templates["Cheap iron hammer head"] = new WeaponComponent({
-        name: "Cheap iron hammer head", description: "A crude ball made of low quality iron, with a small hole for the handle",
+        name: "Training bow limb", description: "A wooden bow limb. Not very strong, but suitable for practicing.",
         component_type: "hammer head",
         value: 100,
-        name_prefix: "Cheap iron",
+        name_prefix: "Training",
         component_tier: 1,
-        attack_value: 12,
-        component_stats: {
-            attack_speed: {
-                multiplier: 0.8,
-            }
-        }
+        attack_value: 4
     });
 
     item_templates["Iron hammer head"] = new WeaponComponent({
@@ -1766,11 +1931,6 @@ book_stats["A Glint On The Sand"] = new BookData({
         component_type: "medium handle",
         value: 16,
         component_tier: 1,
-        component_stats: {
-            attack_speed: {
-                multiplier: 0.95,
-            }
-        }
     });
 
     item_templates["Medium wooden handle"] = new WeaponComponent({
@@ -1797,11 +1957,6 @@ book_stats["A Glint On The Sand"] = new BookData({
         component_type: "long handle",
         value: 24,
         component_tier: 1,
-        component_stats: {
-            attack_speed: {
-                multiplier: 0.9,
-            },
-        }
     });
 
     item_templates["Long wooden shaft"] = new WeaponComponent({
@@ -1956,18 +2111,10 @@ book_stats["A Glint On The Sand"] = new BookData({
     });
 
     item_templates["Short weak bone hilt"] = new WeaponComponent({
-        name: "Short weak bone hilt", description: "A short handle for a sword or maybe a dagger, made of a weak monster's bone",
-        component_type: "short handle",
+        name: "Thin bowstring", description: "A thin, seemingly fragile bowstring.",
+        component_type: "bowstring",
         value: 120,
-        component_tier: 3,
-        component_stats: {
-            attack_power: {
-                multiplier: 1.05,
-            },
-            attack_speed: {
-                multiplier: 1.05,
-            }
-        },
+        component_tier: 1
     });
 
     item_templates["Medium weak bone handle"] = new WeaponComponent({
@@ -1999,19 +2146,20 @@ book_stats["A Glint On The Sand"] = new BookData({
                 multiplier: 1.5,
             }
         }
-    });
+    });*/
 
 })();
 
 //weapons:
 (function(){
-    item_templates["Cheap iron spear"] = new Weapon({
+    item_templates["Training spear"] = new Weapon({
+		set_quality: 100,
         components: {
-            head: "Cheap short iron blade",
-            handle: "Simple long wooden shaft"
+            head: "PlaceholderSpear",
+            handle: "Simple long shaft"
         }
     });
-    item_templates["Iron spear"] = new Weapon({
+    /*item_templates["Iron spear"] = new Weapon({
         components: {
             head: "Short iron blade",
             handle: "Simple long wooden shaft"
@@ -2041,15 +2189,16 @@ book_stats["A Glint On The Sand"] = new BookData({
             head: "Short steel blade",
             handle: "Short wooden hilt",
         }
-    });
+    });*/
 
-    item_templates["Cheap iron sword"] = new Weapon({
+    item_templates["Training sword"] = new Weapon({
+		set_quality: 100,
         components: {
-            head: "Cheap long iron blade",
-            handle: "Simple short wooden hilt",
+            head: "PlaceholderSword",
+            handle: "Simple short hilt"
         }
     });
-    item_templates["Iron sword"] = new Weapon({
+    /*item_templates["Iron sword"] = new Weapon({
         components: {
             head: "Long iron blade",
             handle: "Simple short wooden hilt",
@@ -2060,15 +2209,16 @@ book_stats["A Glint On The Sand"] = new BookData({
             head: "Long steel blade",
             handle: "Short wooden hilt",
         }
-    });
+    });*/
 
-    item_templates["Cheap iron axe"] = new Weapon({
+    item_templates["Training axe"] = new Weapon({
+		set_quality: 100,
         components: {
-            head: "Cheap iron axe head",
-            handle: "Simple medium wooden handle",
+            head: "PlaceholderAxe",
+            handle: "Simple medium handle"
         }
     });
-    item_templates["Iron axe"] = new Weapon({
+    /*item_templates["Iron axe"] = new Weapon({
         components: {
             head: "Iron axe head",
             handle: "Simple medium wooden handle",
@@ -2079,15 +2229,16 @@ book_stats["A Glint On The Sand"] = new BookData({
             head: "Steel axe head",
             handle: "Medium wooden handle",
         }
-    });
+    });*/
 
-    item_templates["Cheap iron battle hammer"] = new Weapon({
+    item_templates["Training bow"] = new Weapon({
+		set_quality: 100,
         components: {
-            head: "Cheap iron hammer head",
-            handle: "Simple medium wooden handle",
+            head: "PlaceholderBow",
+            handle: "Simple bowstring"
         }
     });
-    item_templates["Iron battle hammer"] = new Weapon({
+    /*item_templates["Iron battle hammer"] = new Weapon({
         components: {
             head: "Iron hammer head",
             handle: "Simple medium wooden handle",
@@ -2098,7 +2249,7 @@ book_stats["A Glint On The Sand"] = new BookData({
             head: "Steel hammer head",
             handle: "Medium wooden handle",
         }
-    });
+    });*/
 })();
 
 //armor components:
@@ -3209,17 +3360,76 @@ book_stats["A Glint On The Sand"] = new BookData({
 
 //amulets:
 (function(){
-    item_templates["Warrior's necklace"] = new Amulet({
-        value: 1000,
-        tags: {unique: true},
+    item_templates["Sword Trainee"] = new Amulet({
+		name: "Squire",
+		description: "Tier 0 class, oriented towards swords",
+        value: 0,
+        tags: {unique: true, unsellable: true},
         stats: {
-            attack_power: {
-                multiplier: 1.1,
+            dexterity: {
+                multiplier: 1.05,
             },
-            attack_speed: {
-                multiplier: 1.1,
+            agility: {
+                multiplier: 1.05,
             },
         },
+        xp_multipliers: {
+            Swords: 1.05,
+        }
+    });
+	
+    item_templates["Spear Trainee"] = new Amulet({
+		name: "Recruit",
+		description: "Tier 0 class, oriented towards spears",
+        value: 0,
+        tags: {unique: true, unsellable: true},
+        stats: {
+            strength: {
+                multiplier: 1.05,
+            },
+            defense: {
+                multiplier: 1.05,
+            },
+        },
+        xp_multipliers: {
+            Spears: 1.05,
+        }
+    });
+	
+    item_templates["Axe Trainee"] = new Amulet({
+		name: "Journeyman",
+		description: "Tier 0 class, oriented towards axes",
+        value: 0,
+        tags: {unique: true, unsellable: true},
+        stats: {
+            strength: {
+                multiplier: 1.05,
+            },
+            max_health: {
+                multiplier: 1.05,
+            },
+        },
+        xp_multipliers: {
+            Axes: 1.05,
+        }
+    });
+
+    item_templates["Bow Trainee"] = new Amulet({
+		name: "Nimrod",
+		description: "Tier 0 class, oriented towards bows",
+        value: 0,
+        tags: {unique: true, unsellable: true},
+        stats: {
+            dexterity: {
+                multiplier: 1.05,
+            },
+            crit_rate: {
+                flat: 0.01,
+            },
+        },
+        xp_multipliers: {
+            Bows: 1.05,
+        }
     });
 })();
 
@@ -3258,7 +3468,7 @@ book_stats["A Glint On The Sand"] = new BookData({
         description: "A decent pickaxe made of iron, strong enough for most ores",
         value: 1000,
         equip_slot: "pickaxe",
-        bonus_skill_levels: {
+        base_bonus_skill_levels: {
             "Mining": 3,
         }
     });
@@ -3268,7 +3478,7 @@ book_stats["A Glint On The Sand"] = new BookData({
         description: "A decent axe made of iron, hard and sharp enough for most of trees, even if they will still require an effort",
         value: 1000,
         equip_slot: "axe",
-        bonus_skill_levels: {
+        base_bonus_skill_levels: {
             "Woodcutting": 3,
         }
     });
@@ -3278,7 +3488,7 @@ book_stats["A Glint On The Sand"] = new BookData({
         description: "A decent sickle made of iron, sharp enough for most of plants",
         value: 1000,
         equip_slot: "sickle",
-        bonus_skill_levels: {
+        base_bonus_skill_levels: {
             "Herbalism": 3,
         }
     });
@@ -3288,7 +3498,7 @@ book_stats["A Glint On The Sand"] = new BookData({
         description: "A decent shovel made of iron, solid enough for most of your digging needs",
         value: 1000,
         equip_slot: "shovel",
-        bonus_skill_levels: {
+        base_bonus_skill_levels: {
             "Digging": 3,
         }
     });

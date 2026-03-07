@@ -4,8 +4,8 @@
         <link rel = "stylesheet" href = "style.css">
         
         <script type="module" src="resources/js/HackTimer/HackTimer.min.js"></script>
-        <script type='module' src="dist/bundle.js?version=v0.5.0.28"></script>
-        <!--script type="module" src="src/main.js"></script-->
+        <!--script type='module' src="dist/bundle.js?version=v0.4.2"></script-->
+        <script type="module" src="src/main.js"></script>
 
         <!--Icons-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,14 +18,14 @@
         <meta name="description" content="A text-based idle RPG game inspired by Proto23, with heavy focus on progression through skill leveling, created by Miktaew.">
         <meta name="author" content="Miktaew">
         <meta property="og:title" content="Yet Another Idle RPG">
-        <meta property="og:description" content="A text-based idle RPG game inspired by Proto23, with heavy focus on progression through skill leveling, created by Miktaew.">
+        <meta property="og:description" content="A text-based idle RPG game inspired by Proto23, with heavy focus on progression through skill leveling, created by Miktaew. Known as Nya-iRPG, yairpg, or sometimes just yair.">
         <meta property="og:image" content="https://miktaew.github.io/yet-another-idle-rpg-dev/resources/img/bigger_icon.png">
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebPage",
             "headline": "Yet Another Idle RPG",
-            "description": "A text-based idle RPG game inspired by Proto23, with heavy focus on progression through skill leveling, created by Miktaew.",
+            "description": "A text-based idle RPG game inspired by Proto23, with heavy focus on progression through skill leveling, created by Miktaew. Known as Nya-iRPG, yairpg, or sometimes just yair.",
             "image": "https://miktaew.github.io/yet-another-idle-rpg-dev/resources/img/bigger_icon.png",
             "author": {
                 "@type": "Person",
@@ -78,7 +78,7 @@
                                 
                             </div>
                         </div>
-                        <div id = "character_xp_value">
+                        <div id = "character_xp_value" class="outline_black">
                         </div>
                         <div id="character_xp_tooltip" class="character_bar_tooltip">
                         </div>
@@ -89,7 +89,7 @@
                             <div id = "character_stamina_bar_current">
                             </div>
                         </div>
-                        <div id = "character_stamina_value">
+                        <div id = "character_stamina_value" class="outline_black">
                             
                         </div>
                         <div id="character_stamina_tooltip" class="character_bar_tooltip">
@@ -100,7 +100,7 @@
                             <div id = "character_mana_bar_current">
                             </div>
                         </div>
-                        <div id = "character_mana_value">
+                        <div id = "character_mana_value" class="outline_black">
                             0/0 mana
                         </div>
                         <div id="character_mana_tooltip" class="character_bar_tooltip">
@@ -112,7 +112,7 @@
                             <div id = "character_healthbar_current">
                             </div>
                         </div>
-                        <div id = "character_health_value">
+                        <div id = "character_health_value" class="outline_black">
                         </div>
                         <div id="character_health_tooltip" class="character_bar_tooltip">
                         </div>
@@ -549,6 +549,13 @@
                             </div>
                         </div>
                     </div>
+                    <div id = "clear_count_div">
+                        <div id = "clear_count_content">
+                            <div style = "display:inline-block;"> 
+                                Clears: [0]
+                            </div>
+                        </div>
+                    </div>
                     <div id = "enemy_count_div">
                         <div id = "enemy_count_content">
                             <div style = "display:inline-block;"> 
@@ -736,6 +743,11 @@
                             <div id = "quest_list">
 
                             </div>
+                            <div id = "quest_hiding_div">
+                                <label for="quest_hiding_button">Hide completed</label>
+                                <input type="checkbox" id="quest_hiding_button" name="quest_hiding_button" value="quest_hiding_button" onclick = "changeCompletedQuestVisibility()" >
+                                
+                            </div>
                         </div>
                         <div id = "bestiary_box_div">
                             <div id = "bestiary_list">
@@ -909,7 +921,7 @@
                                 <div class = "equipment_slot_div" id = "feet_slot"> feet </div>
                             </div>
                             <div class = "grid_container">
-                                <div class = "equipment_slot_div" id = "amulet_slot"> amulet </div>
+                                <div class = "equipment_slot_div" id = "amulet_slot"> class </div>
                                 <div class = "equipment_slot_div" id = "artifact_slot"> artifact </div>
                             </div>
                             <div class = "equipment_slot_div equipment_slot_div_long" id = "cape_slot"> cape </div>
@@ -920,6 +932,7 @@
                             <div class = "equipment_slot_div" id = "pickaxe_slot"> pickaxe </div>
                             <div class = "equipment_slot_div" id = "sickle_slot"> sickle </div>
                             <div class = "equipment_slot_div" id = "shovel_slot"> shovel </div>
+                            <div class = "equipment_slot_div" id = "fishing_slot"> fishing rod </div>
                         </div>
                     </div>
                     <div id = "character_control_div" class="activable_buttons">
@@ -999,6 +1012,11 @@
                     <input type="checkbox" id="options_log_gathering_result" name="options_log_gathering_result" value="options_log_gathering_result" onclick = "option_log_gathering_result()" checked>
                     <label for="options_log_gathering_result">Log total gathered materials on gathering finish</label>
                 </div>
+                <div class="options_choice options_choice_range">
+                    <label for="options_expo_threshold">Use scientific notation for values over:</label>
+                    <input type="range" id="options_expo_threshold" name="options_expo_threshold" min="3" max="18" onchange="option_expo_threshold()" value="9" oninput="this.nextElementSibling.value = '1e'+this.value">
+                    <output>1e9</output>
+                </div>
                 <div class="options_choice">
                     <input type="checkbox" id="options_use_uncivilised_temperature_scale" name="options_use_uncivilised_temperature_scale" value="options_use_uncivilised_temperature_scale" onclick = "option_use_uncivilised_temperature_scale()">
                     <label for="options_use_uncivilised_temperature_scale">Use Fahrenheit instead of Celsius</label>
@@ -1036,6 +1054,13 @@
         </canvas>
 
         <script>
+            document.addEventListener("keydown", function(e) {
+                if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                    e.preventDefault();
+                    saveProgress();
+                }
+            }, false);
+
             function openOptions() {
                 if(document.documentElement.style.getPropertyValue("--options_display") !== "block") {
                     document.documentElement.style.setProperty('--options_display', 'block');
@@ -1211,6 +1236,10 @@
             function switchToInventory() {
                 document.documentElement.style.setProperty('--inventory_div_display', 'block');
                 document.documentElement.style.setProperty('--character_combat_div_display', 'none');
+            }
+
+            function changeCompletedQuestVisibility() {
+                change_completed_quest_visibility();
             }
 
             let in_trade = false;
@@ -1873,14 +1902,14 @@
                             effects_tooltip.style.top = event.pageY - 300 + "px";
                             effects_tooltip.style.maxHeight = Math.max(20,max_height) + "px";
 
-                            const gap = 5; //4px of gap + 1px of margin top
+                            const gap = 11; //4px of gap + 1px of margin + ...something?
                             let total_height = 0;
                             for(let i = 0 ; i < elems.length; i++) {
                                 total_height += elems[i].offsetHeight+gap;
                             }
 
                             const columns = Math.min(elems.length, Math.ceil(total_height / (max_height+4)));
-                            effects_tooltip.style.width = (columns * 210 || 120)+ "px";
+                            effects_tooltip.style.width = (columns * 222 || 120)+ "px";
                         } 
                         tooltip_wait = Date.now() + 1000 / tooltip_move_ticks;
                     }
@@ -1909,6 +1938,11 @@
                     if(clicked_element.classList.contains("equip_item_button") || clicked_element.classList.contains("unequip_item_button")) {
                         return;
                     }
+
+                    if(clicked_element.dataset.unsellable) {
+                        return;
+                    }
+
 
                     let number_to_move = 1;
 

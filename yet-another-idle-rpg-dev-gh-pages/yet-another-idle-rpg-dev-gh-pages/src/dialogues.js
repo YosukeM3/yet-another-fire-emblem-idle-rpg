@@ -7,8 +7,10 @@ const dialogues = {};
 class Dialogue {
     constructor({ 
         name,
+        getName = () =>{return this.name},
         id,
-        starting_text = `Talk to the ${name}`,
+        starting_text = `Talk to ${name}`,
+        getStartingText = () =>{return this.starting_text},
         ending_text = `Go back`,
         is_unlocked = true,
         is_finished = false,
@@ -18,9 +20,11 @@ class Dialogue {
         getDescription = ()=>{return this.description;},
         location_name
     })  {
-        this.name = name; //displayed name, e.g. "Village elder"
+        this.name = name; //displayed name, e.g. "village elder"
+        this.getName = getName;
         this.id = id || this.name;
         this.starting_text = starting_text;
+        this.getStartingText = getStartingText;
         this.ending_text = ending_text; //text shown on option to finish talking
         this.is_unlocked = is_unlocked;
         this.is_finished = is_finished; //separate bool to remove dialogue option if it's finished
@@ -58,7 +62,7 @@ class Textline {
                             stances: [],
                             flags: [],
                             items: [],
-                            locks: {textlines: {}}, //for lines to be locked in diferent dialogues and possibly for other stuff
+                            locks: {}, //for lines to be locked in diferent dialogues and possibly for other stuff
                             //reputation reward from textlines is currently not supported
                             },
                 branches_into = [],
@@ -111,195 +115,164 @@ class DialogueAction extends GameAction {
 }
 
 (function(){
-    dialogues["village elder"] = new Dialogue({
+    dialogues["Grandfather 1"] = new Dialogue({
         //ram
-        name: "village elder",
+        name: "your grandfather",
+		id: "Grandfather 1",
         textlines: {
-            "hello": new Textline({
-                name: "elder hello",
-                text: "elder hello answ",
+            "Grandfather line 1": new Textline({
+                name: "Greet your grandfather",
+                text: "Grandfather greets back",
                 rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["what happened", "where am i", "dont remember", "about"]}],
+					textlines: [{dialogue: "Grandfather 1", lines: ["Grandfather line 2"]}],
                 },
-                locks_lines: ["hello"],
+                locks_lines: ["Grandfather line 1"],
             }),
-            "what happened": new Textline({
-                name: "elder head hurts",
-                text: "elder head hurts answ",
+            "Grandfather line 2": new Textline({
+                name: "Enthusiastic response",
+                text: "Enthusiasm acknowledged",
                 is_unlocked: false,
-                locks_lines: ["what happened", "where am i", "dont remember"],
+                locks_lines: ["Grandfather line 2"],
                 rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["ask to leave 1"]}],
-                    quest_progress: [
-                        {quest_id: "Lost memory", task_index: 0},
-                    ]
+                    quest_progress: [{quest_id: "Training", task_index: 0}],
+                    items: [{item: "Fresh bread", count: 5}],
+					locations: [{location: "Village"}],
                 },
+				locks: {
+					dialogues: ["Grandfather 1"]
+				},
             }),
-            "where am i": new Textline({
-                name: "elder where",
-                text: "elder where answ",
+            "Checking": new Textline({
+                name: "Ask grandfather",
+                text: "All good",
                 is_unlocked: false,
-                locks_lines: ["what happened", "where am i", "dont remember"],
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["ask to leave 1"]}],
-                    quest_progress: [
-                        {quest_id: "Lost memory", task_index: 0},
-                    ]
-                },
-            }),
-            "dont remember": new Textline({
-                name: "elder remember",
-                text: "elder remember answ",
-                is_unlocked: false,
-                locks_lines: ["what happened", "where am i", "dont remember"],
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["ask to leave 1"]}],
-                    quest_progress: [
-                        {quest_id: "Lost memory", task_index: 0},
-                    ]
-                },
-            }),
-            "about": new Textline({
-                name: "elder who",
-                text: "elder who answ",
-                is_unlocked: false,
-                locks_lines: ["about"]
-            }),
-            "ask to leave 1": new Textline({
-                name: "elder leave 1",
-                text: "elder leave 1 answ",
-                is_unlocked: false,
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["need to"]}],
-                },
-                locks_lines: ["ask to leave 1"],
-            }),
-            "need to": new Textline({
-                name: "elder need to",
-                text: "elder need to answ",
-                is_unlocked: false,
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["rats", "ask to leave 2", "equipment"]}],
-                    locations: [{location: "Infested field"}],
-                    activities: [{location:"Village", activity:"weightlifting"}, {location:"Village",activity:"running"}],
-                    quest_progress: [
-                        {quest_id: "Lost memory", task_index: 1},
-                    ]
-                },
-                locks_lines: ["need to"],
-            }),
-            "equipment": new Textline({
-                name: "elder eq",
-                text: "elder eq answ",
-                is_unlocked: false,
-                locks_lines: ["equipment"],
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["money"]}],
-                    traders: [{trader: "village trader"}]
-                }
-            }),
-            "money": new Textline({
-                name: "elder money",
-                text: "elder money answ",
-                is_unlocked: false,
-                locks_lines: ["money"],
-                rewards: {
-                    activities: [{location: "Village", activity: "fieldwork"}],
-                }
-            }),
-            "ask to leave 2": new Textline({
-                name: "elder leave 2",
-                text: "elder leave 2 answ",
-                is_unlocked: false,
-                rewards: {
-                },
-            }),
-            "rats": new Textline({
-                name: "elder rats",
-                text: "elder rats answ",
-                is_unlocked: false,
-            }),
-            "cleared field": new Textline({ //will be unlocked on clearing infested field combat_zone
-                name: "elder cleared 1",
-                text: "elder cleared 1 answ",
-                is_unlocked: false,
-                rewards: {
-                    locations: [{location: "Nearby cave"}, {location: "Infested field"}, {location: "Shack"}],
-                    textlines: [{dialogue: "village elder", lines: ["ask to leave 3"]}],
-                    dialogues: ["old craftsman"],
-                },
-                locks_lines: ["ask to leave 2", "cleared field"],
-            }),
-            "ask to leave 3": new Textline({
-                name: "elder leave 3",
-                text: "elder leave 3 answ",
-                rewards: {
-                    locations: [{location: "Nearby cave"}, {location: "Infested field"}],
-                    dialogues: ["old craftsman"],
-                },
-                is_unlocked: false,
-            }),
-            "cleared room": new Textline({
-                name: "elder room clear",
-                text: "elder room clear answ",
-                is_unlocked: false,
-                rewards: {
-                    locations: [{location: "Eastern mill"}],
-                    quests: ["It won't mill itself"],
-                },
-                locks_lines: ["cleared room"],
-            }),
-            "cleared cave": new Textline({
-                name: "elder cave clear",
-                text: "elder cave clear answ",
-                is_unlocked: false,
-                rewards: {
-                    textlines: [{dialogue: "village elder", lines: ["ask to leave 4"]}],
-                    locations: [{location: "Forest road"}, {location: "Infested field"}, {location: "Nearby cave"}],
-                    dialogues: ["village guard"],
-                    quest_progress: [
-                        {quest_id: "Lost memory", task_index: 2},
-                    ]
-                },
-                locks_lines: ["ask to leave 3", "rats", "cleared cave"],
-            }),
-            "ask to leave 4": new Textline({
-                name: "elder leave 4",
-                text: "elder leave 4 answ",
-                is_unlocked: false,
-                rewards: {
-                    locations: [{location: "Forest road"}, {location: "Infested field"}, {location: "Nearby cave"}],
-                    dialogues: ["village guard", "old craftsman"],
-                },
-            }),
-            "new tunnel": new Textline({
-                name: "elder tunnel",
-                text: "elder tunnel answ",
-                is_unlocked: false,
-                locks_lines: ["new tunnel"],
-            }),
-
-            "more training": new Textline({
-                name: "elder training",
-                getText: (context) => {
-                    if(context?.season === "Winter") {
-                        return "elder training answ 2";
-                    } else {
-                        return "elder training answ 1";
-                    }
-                },
-                is_unlocked: false,
-                locks_lines: ["more training"],
-                rewards: {
-                    global_activities: ["swimming", "climbing"],
-                    actions: [{location: "Nearby cave", action: "climb the mountain"}],
-                    locks: {
-                        quests: ["Swimming alternative unlock"]
-                    }
-                }
             })
         },
-        description: "elder description",
+        description: "Grandfather description",
+    });
+	
+	    dialogues["Grandfather 2"] = new Dialogue({
+        //ram
+        name: "your grandfather",
+		id: "Grandfather 2",
+        textlines: {
+            "Grandfather line 3": new Textline({
+                name: "Ready to train",
+                text: "Weapon choice",
+                rewards: {
+                    textlines: [{dialogue: "Grandfather 2", lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"]}],
+                },
+                locks_lines: ["Grandfather line 3"],
+            }),
+            "Grandfather line 4.1": new Textline({
+                name: "Choose sword",
+                text: "Weapon chosen",
+                is_unlocked: false,
+                locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
+                rewards: {
+                    items: ["Sword Trainee", {item: "Training sword", quality: 100}],
+					locations: [{location: "Training area"}],
+                },
+            }),
+            "Grandfather line 4.2": new Textline({
+                name: "Choose spear",
+                text: "Weapon chosen",
+                is_unlocked: false,
+                locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
+                rewards: {
+                    items: ["Spear Trainee", {item: "Training spear", quality: 100}],
+					locations: [{location: "Training area"}],
+                },
+            }),
+            "Grandfather line 4.3": new Textline({
+                name: "Choose axe",
+                text: "Weapon chosen",
+                is_unlocked: false,
+                locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
+                rewards: {
+                    items: ["Axe Trainee", {item: "Training axe", quality: 100}],
+					locations: [{location: "Training area"}],
+                },
+            }),
+            "Grandfather line 4.4": new Textline({
+                name: "Choose bow",
+                text: "Weapon chosen",
+                is_unlocked: false,
+                locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
+                rewards: {
+                    items: ["Bow Trainee", {item: "Training bow", quality: 100}],
+					locations: [{location: "Training area"}],
+                },
+            }),
+            "Training finished": new Textline({
+                name: "Finished training",
+                text: "Proud grandfather",
+                is_unlocked: false,
+                locks_lines: ["Training finished"],
+                rewards: {
+					textlines: [{dialogue: "Grandfather 2", lines: ["Ask to leave"]}],
+                },
+            }),
+            "Ask to leave": new Textline({
+                name: "Eager to leave",
+                text: "Stern grandfather",
+                is_unlocked: false,
+                locks_lines: ["Ask to leave"],
+                rewards: {
+					textlines: [{dialogue: "Grandfather 2", lines: ["Insist on leaving"]}],
+                },
+            }),
+            "Insist on leaving": new Textline({
+                name: "Insist",
+                text: "Angry grandfather",
+                is_unlocked: false,
+                locks_lines: ["Insist on leaving"],
+                rewards: {
+					textlines: [{dialogue: "Grandfather 1", lines: ["Checking"]}],
+                    dialogues: ["Village gate guard"],
+                },
+				locks: {
+					dialogues: ["Grandfather 2"]
+				},
+            })
+        },
+        description: "Grandfather description",
+    });
+	
+	    dialogues["Village gate guard"] = new Dialogue({
+        //ram
+        name: "the village guard",
+        is_unlocked: false,
+		id: "Village gate guard",
+        textlines: {
+            "Village guard line 1": new Textline({
+                name: "Ask to leave",
+                text: "Guard greets you",
+                rewards: {
+                    textlines: [{dialogue: "Village gate guard", lines: ["Village guard line 2"]}],
+                },
+                locks_lines: ["Village guard line 1"],
+            }),
+            "Village guard line 2": new Textline({
+                name: "Lie to the guard",
+                text: "Guard falls for it",
+                is_unlocked: false,
+                rewards: {
+                    textlines: [{dialogue: "Village gate guard", lines: ["Village guard line 3"]}],
+					locations: [{location: "Forest road"}],
+                },
+                locks_lines: ["Village guard line 2"],
+				locks: {
+					dialogues: ["Grandfather 1"]
+				}
+            }),
+            "Village guard line 3": new Textline({
+                name: "Guard check",
+                text: "Nothing to report",
+                is_unlocked: false,
+            })
+        },
+        description: "Village guard description",
     });
 
     dialogues["old craftsman"] = new Dialogue({
@@ -612,9 +585,9 @@ class DialogueAction extends GameAction {
                 locks_lines: ["defeated"],
                 rewards: {
                     textlines: [{dialogue: "suspicious man", lines: ["behave", "situation"]}],
-                    quest_progress: [
+/*                    quest_progress: [
                         {quest_id: "Lost memory", task_index: 3},
-                    ]
+                    ]*/
                 },
             }), 
             "behave": new Textline({ 
@@ -981,5 +954,12 @@ class DialogueAction extends GameAction {
     });
     */
 })();
+
+Object.keys(dialogues).forEach(id => {
+    dialogues[id].id = id;
+    if(!dialogues[id].name) {
+        dialogues[id].name = id;
+    }
+});
 
 export {dialogues};

@@ -8,6 +8,7 @@ import { get_total_skill_level, is_rat } from "./character.js";
 import { GameAction } from "./actions.js";
 import { fill_market_regions, market_regions } from "./market_saturation.js";
 import { global_flags } from "./main.js";
+import { dialogues } from "./dialogues.js";
 const locations = {}; //contains all the created locations
 const location_types = {};
 
@@ -272,6 +273,7 @@ class Combat_zone {
                                         loot_list: enemy.loot_list,
                                         add_to_bestiary: enemy.add_to_bestiary,
                                         size: enemy.size,
+										weapon: enemy.weapon,
                                     });
 
             } else {
@@ -291,7 +293,8 @@ class Combat_zone {
                     },
                     loot_list: enemy.loot_list,
                     add_to_bestiary: enemy.add_to_bestiary,
-                    size: enemy.size
+                    size: enemy.size,
+					weapon: enemy.weapon,
                 });
             }
             newEnemy.is_alive = true;
@@ -678,21 +681,21 @@ function get_location_type_penalty(type, stage, stat, category) {
 //create locations and zones
 (function(){ 
     locations["Village"] = new Location({ 
-        getDescription: function() {
-            if(locations["Infested field"].enemy_groups_killed >= 5 * locations["Infested field"].enemy_count) { 
-                return "Medium-sized village, built next to a small and calm river at the foot of the mountains. It's surrounded by many fields, a few of them infested by huge rats, which, while an annoyance, don't seem possible to fully eradicate. Other than that, there's nothing interesting around";
-            } else if(locations["Infested field"].enemy_groups_killed >= 2 * locations["Infested field"].enemy_count) {
+/*        getDescription: function() {
+            if(locations["Training area"].enemy_groups_killed >= 5 * locations["Training area"].enemy_count) { 
+                return "A small, remote village. To the south and west is a large, perhaps endless sea, and little to nothing to the north. The only exit, towards the east, leads to a forest.";
+            } else if(locations["Training area"].enemy_groups_killed >= 2 * locations["Training area"].enemy_count) {
                 return "Medium-sized village, built next to a small and calm river at the foot of the mountains. It's surrounded by many fields, many of them infested by huge rats. Other than that, there's nothing interesting around";
             } else {
                 return "Medium-sized village, built next to a small and calm river at the foot of the mountains. It's surrounded by many fields, most of them infested by huge rats. Other than that, there's nothing interesting around"; 
             }
-        },
+        },*/
         getBackgroundNoises: function() {
             let noises = ["*You hear some rustling*"];
             if(current_game_time.hour > 4 && current_game_time.hour <= 20) {
-                noises.push("Anyone seen my cow?", "Mooooo!", "Tomorrow I'm gonna fix the roof", "Look, a bird!");
+                noises.push("I heard working as a mercenary pays well...", "Look at what I brought from the capital!", "The forest has been rather dangerous as of late...");
 
-                if(locations["Infested field"].enemy_groups_killed <= 3) {
+/*                if(locations["Training area"].enemy_groups_killed <= 3) {
                     noises.push("These nasty rats almost ate my cat!");
                     if(is_rat()) {
                         //you can blame Mercurius for this line
@@ -702,21 +705,23 @@ function get_location_type_penalty(type, stage, stat, category) {
                 } else if(is_rat()) {
                     //also possible after clear condition is done, but less common
                     noises.push("These nasty rats almost ate my rat!");
-                }
+                }*/
             }
 
             if(current_game_time.hour > 3 && current_game_time.hour < 10) {
-                noises.push("♫♫ Heigh ho, heigh ho, it's off to work I go~ ♫♫", "Cock-a-doodle-doo!");
+                noises.push("Time for another day of choppin' wood!");
             } else if(current_game_time.hour > 18 && current_game_time.hour < 22) {
-                noises.push("♫♫ Heigh ho, heigh ho, it's home from work I go~ ♫♫");
+                noises.push("Whew, time to relax...");
             } 
 
             return noises;
         },
-        dialogues: ["village elder", "village guard", "old craftsman"],
-        traders: ["village trader"],
+		description: "A small, remote village. To the south and west is a large, perhaps endless sea, and little to nothing to the north. The only exit, towards the east, leads to a forest.",
+        dialogues: ["Grandfather 2", "Village gate guard"],
+//        traders: ["village trader"],
         market_region: "Village",
         name: "Village", 
+		is_unlocked: false,
         crafting: {
             is_unlocked: true, 
             use_text: "Try to craft something", 
@@ -732,20 +737,29 @@ function get_location_type_penalty(type, stage, stat, category) {
         },
     });
 
-    locations["Shack"] = new Location({
+    locations["Your house"] = new Location({
         connected_locations: [{location: locations["Village"], custom_text: "Go outside to [Village]", travel_time: 10}],
-        description: "This small shack was the only spare building in the village. It's surprisingly tidy.",
-        name: "Shack",
-        is_unlocked: false,
+		getDescription: function() {
+            if(dialogues["Village gate guard"].textlines["Village guard line 2"].is_finished) {
+				return "Your old house. Your grandfather is nowhere to be seen."
+			} else {
+				return "You have no idea when this house was built. Your grandfather and you have lived in here ever since you have memory."
+			}
+		},
+				
+//        description: "You have no idea when this house was built. Your grandfather and you have lived in here ever since you have memory.",
+        name: "Your house",
+        is_unlocked: true,
         housing: {
             is_unlocked: true,
             text_to_sleep: "Take a nap",
             sleeping_xp_per_tick: 1},
         temperature_range_modifier: 0.4,
         is_under_roof: true,
+		dialogues: ["Grandfather 1"],
     });
 
-    locations["Village"].connected_locations.push({location: locations["Shack"], travel_time: 10});
+    locations["Village"].connected_locations.push({location: locations["Your house"], travel_time: 10});
     //remember to always add it like that, otherwise travel will be possible only in one direction and location might not even be reachable
 
     locations["Eastern mill"] = new Location({
@@ -805,41 +819,34 @@ function get_location_type_penalty(type, stage, stat, category) {
     });
     locations["Eastern mill"].connected_locations.push({location: locations["Eastern storehouse"], travel_time: 10});
 
-    locations["Infested field"] = new Combat_zone({
-        description: "Field infested with wolf rats. You can see the grain stalks move as these creatures scurry around.", 
-        enemy_count: 15, 
-        enemies_list: ["Starving wolf rat", "Wolf rat"],
+    locations["Training area"] = new Combat_zone({
+        description: "Your grandfather set up some training dummies right outside the house.", 
+        enemy_count: 5, 
+        enemies_list: ["Training dummy"],
         types: [{type: "open", stage: 1, xp_gain: 1}],
-        enemy_stat_variation: 0.1,
+        enemy_stat_variation: 0,
         is_unlocked: false, 
-        name: "Infested field", 
+        name: "Training area", 
         parent_location: locations["Village"],
         first_reward: {
             xp: 10,
-            reputation: {"village": 20},
         },
         repeatable_reward: {
-            textlines: [
+/*            textlines: [
                 {dialogue: "village elder", lines: ["cleared field"]},
-            ],
+            ],*/
             xp: 5,
         },
-        rewards_with_clear_requirement: [
+       rewards_with_clear_requirement: [
             {
-                required_clear_count: 2,
-                reputation: {"village": 10},
-            },
-            {
-                required_clear_count: 4,
-                reputation: {"village": 30},
-            },
-            {
-                required_clear_count: 10,
-                reputation: {"village": 50},
+                required_clear_count: 1,
+				textlines: [
+					{dialogue: "Grandfather 2", lines: ["Training finished"]},
+				],
             }
         ]
     });
-    locations["Village"].connected_locations.push({location: locations["Infested field"], travel_time: 15});
+    locations["Village"].connected_locations.push({location: locations["Training area"], travel_time: 15});
 
     locations["Nearby cave"] = new Location({ 
         connected_locations: [{location: locations["Village"], custom_text: "Go outside and to the [Village]", travel_time: 60}], 
@@ -921,7 +928,7 @@ function get_location_type_penalty(type, stage, stat, category) {
             xp: 60,
         },
         repeatable_reward: {
-            textlines: [{dialogue: "village elder", lines: ["cleared cave"]}],
+ //           textlines: [{dialogue: "village elder", lines: ["cleared cave"]}],
             xp: 30,
         },
         rewards_with_clear_requirement: [
@@ -1078,10 +1085,10 @@ There's another gate on the wall in front of you, but you have a strange feeling
 
     locations["Forest road"] = new Location({ 
         connected_locations: [{location: locations["Village"], travel_time: 240}],
-        description: "Old trodden road leading through a dark forest, the only path connecting the village to the town. You can hear some animals from the surrounding woods.",
+        description: "An old path leading through a forest. You have no idea what lies beyond this, but the recent rumors of Terrors don't give you the impression that this is a safe place.",
         name: "Forest road",
         getBackgroundNoises: function() {
-            let noises = ["*You hear some rustling*", "Roar!", "*You almost tripped on some roots*", "*You hear some animal running away*"];
+            let noises = ["*You smell something strange... You can't quite identify what it is*"];
 
             return noises;
         },
@@ -1090,20 +1097,20 @@ There's another gate on the wall in front of you, but you have a strange feeling
     locations["Village"].connected_locations.push({location: locations["Forest road"], custom_text: "Leave the village towards [Forest road]", travel_time: 240});
 
     locations["Forest"] = new Combat_zone({
-        description: "Forest surrounding the village, a dangerous place", 
-        enemies_list: ["Starving wolf", "Young wolf"],
+        description: "Forest to the east of the village. Smells putrid.", 
+        enemies_list: ["Revenant"],
         types: [{type: "narrow", stage: 1, xp_gain: 1}],
         enemy_count: 30, 
         enemy_stat_variation: 0.2,
         name: "Forest", 
         parent_location: locations["Forest road"],
         first_reward: {
-            xp: 100,
+            xp: 20,
         },
         repeatable_reward: {
-            xp: 50,
-            locations: [{location:"Deep forest"}],
-            activities: [{location:"Forest road", activity: "herbalism"}],
+            xp: 10,
+//            locations: [{location:"Deep forest"}],
+//            activities: [{location:"Forest road", activity: "herbalism"}],
         },
     });
     locations["Forest road"].connected_locations.push({location: locations["Forest"], custom_text: "Leave the safe path and walk into the [Forest]", travel_time: 30});
@@ -1583,7 +1590,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
         parent_location: locations["Nearby cave"],
         repeatable_reward: {
             locations: [{location: "Hidden tunnel"}],
-            textlines: [{dialogue: "village elder", lines: ["new tunnel"]}],
+//            textlines: [{dialogue: "village elder", lines: ["new tunnel"]}],
             xp: 20,
             quests: ["The Infinite Rat Saga"],
         },

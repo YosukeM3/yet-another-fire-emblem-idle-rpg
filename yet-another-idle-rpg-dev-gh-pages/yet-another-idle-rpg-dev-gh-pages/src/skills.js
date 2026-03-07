@@ -9,12 +9,16 @@ import {stat_names} from "./misc.js";
 
 const weapon_type_to_skill = {
     "axe": "Axes",
-    "dagger": "Daggers",
-    "hammer": "Hammers",
     "sword": "Swords",
     "spear": "Spears",
-    "staff": "Staffs",
-    "wand": "Wands"
+    "bow": "Bows"
+};
+
+const class_to_skill = {
+	"Sword Trainee": "Squire",
+	"Spear Trainee": "Recruit",
+	"Axe Trainee": "Journeyman",
+	"Bow Trainee": "Nimrod"
 };
 
 //for display foldering and for different treatment when it comes to xp gain caps
@@ -43,6 +47,7 @@ class Skill {
                   xp_scaling = 1.8,
                   is_unlocked = true,
                   category,
+                  get_stat_modifiers = () => {return {}},
                 }) 
     {
         if(skill_id === "all" || skill_id === "hero" || skill_id === "all_skill") {
@@ -92,6 +97,8 @@ class Skill {
 
         this.xp_scaling = xp_scaling > 1 ? xp_scaling : 1.6;
         //how many times more xp needed for next level
+		
+		this.get_stat_modifiers = get_stat_modifiers;
     }
 
     name() {
@@ -437,7 +444,7 @@ function format_skill_rewards(milestone){
                                     return `Multiplies AP by ${Math.round(get_total_skill_coefficient({skill_id:"Combat",scaling_type:"multiplicative"})*1000)/1000}`;
                                 }});
     
-    skills["Pest killer"] = new Skill({
+/*    skills["Pest killer"] = new Skill({
                                 names: {0: "Pest killer", 15: "Pest slayer"}, 
                                 description: "Small enemies might not seem very dangerous, but it's not that easy to hit them!", 
                                 max_level_coefficient: 2,
@@ -506,8 +513,53 @@ function format_skill_rewards(milestone){
                                 category: "Combat",
                                 get_effect_description: ()=> {
                                     return `Multiplies EP against large-type enemies by ${Math.round(get_total_skill_coefficient({skill_id:"Giant slayer",scaling_type:"multiplicative"})*1000)/1000}`;
-                                }});
-
+                                }});*/
+								
+	skills["Triangle vs Axe"] = new Skill({
+									names: {0: "?"},
+									description: "?",
+									max_level: 60,
+                                    visibility_treshold: 999999999,
+									max_level_coefficient: 31,
+									category: "Combat",
+									get_stat_modifiers: () => {
+										return {
+											modifier_to_hit_chance: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Axe"}),
+											modifier_to_evasion: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Axe"})
+										};
+									}
+                            });    
+								
+	skills["Triangle vs Spear"] = new Skill({
+									names: {0: "?"},
+									description: "?",
+									max_level: 60,
+                                    visibility_treshold: 999999999,
+									max_level_coefficient: 31,
+									category: "Combat",
+									get_stat_modifiers: () => {
+										return {
+											modifier_to_hit_chance: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Spear"}),
+											modifier_to_evasion: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Spear"})
+										};
+									}
+                            });    
+								
+	skills["Triangle vs Sword"] = new Skill({
+									names: {0: "?"},
+									description: "?",
+									max_level: 60,
+                                    visibility_treshold: 999999999,
+									max_level_coefficient: 31,
+									category: "Combat",
+									get_stat_modifiers: () => {
+										return {
+											modifier_to_hit_chance: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Sword"}),
+											modifier_to_evasion: get_total_skill_coefficient({scaling_type: "flat", skill_id: "Triangle vs Sword"})
+										};
+									}
+                            });    
+								
     skills["Evasion"] = new Skill({
                                 names: {0: "Evasion"},                                
                                 description:"Ability to evade attacks. You cannot do it while using a shield",
@@ -635,6 +687,39 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                             }
                                         },
                                     }});
+})();
+
+//class skills
+(function(){
+    skills["Squire"] = new Skill({
+                                    names: {0: "Squire"}, 
+                                    description: "A title earned by those who have begun studying the blade",
+									base_xp_cost: 35,
+                                    category: "Class",
+                                    max_level: 20,
+                                });
+    skills["Recruit"] = new Skill({
+                                    names: {0: "Recruit"}, 
+                                    description: "A title earned by those who have taken up the spear",
+									base_xp_cost: 35,
+                                    category: "Class",
+                                    max_level: 20,
+                                });
+    skills["Journeyman"] = new Skill({
+                                    names: {0: "Journeyman"}, 
+                                    description: "A title earned by those who have begun to learn to use an axe",
+									base_xp_cost: 35,
+                                    category: "Class",
+                                    max_level: 20,
+                                });
+    skills["Nimrod"] = new Skill({
+                                    names: {0: "Nimrod"}, 
+                                    description: "A title earned by those who have decided to pick up a bow",
+									base_xp_cost: 35,
+                                    category: "Class",
+                                    max_level: 20,
+                                });         
+                               
 })();
 
 //combat stances
@@ -1174,14 +1259,14 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                 max_level_coefficient: 8
                             });
 
-    skills["Hammers"] = new Skill({ 
+    skills["Bows"] = new Skill({ 
                                         parent_skill: "Weapon mastery",
-                                        names: {0: "Hammer combat"}, 
+                                        names: {0: "Marksmanship"}, 
                                         category: "Weapon",
-                                        description: "Ability to fight with battle hammers. Why bother trying to cut someone, when you can just crack all their bones?", 
+                                        description: "?", 
                                         get_effect_description: ()=> {
-                                            return `Multiplies damage dealt with battle hammers by ${Math.round(get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})*1000)/1000}.
-Multiplies AP with hammers by ${Math.round((get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
+                                            return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})*1000)/1000}.
+Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                         },
                                         milestones: {
                                             1: {
@@ -2618,5 +2703,6 @@ export {
     skills, Skill, skill_categories, 
     get_unlocked_skill_rewards, get_next_skill_milestone, 
     weapon_type_to_skill, which_skills_affect_skill, 
-    skill_xp_gains_cap, crafting_skill_xp_gains_cap
+    skill_xp_gains_cap, crafting_skill_xp_gains_cap,
+	class_to_skill
 };

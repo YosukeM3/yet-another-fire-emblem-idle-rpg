@@ -12,9 +12,25 @@ const enemy_sizes = {
     LARGE: "large",
 }
 
+const enemy_weapons = {
+	SWORD: "sword",
+	SPEAR: "spear",
+	AXE: "axe",
+	BOW: "bow",
+	NONE: "none",
+}
+
 const droprate_modifier_skills_for_tags = {
     "beast": "Butchering",
 }
+
+//tag: [skills], since some skills might be tag-specific and some might affect multiple tags
+const enemy_tag_to_skill_mapping = {
+    "axe": ["Triangle vs Axe"],
+    "spear": ["Triangle vs Spear"],
+	"sword": ["Triangle vs Sword"],
+}
+
 const tags_for_droprate_modifier_skills = {};
 Object.keys(droprate_modifier_skills_for_tags).forEach(tag => {
     tags_for_droprate_modifier_skills[droprate_modifier_skills_for_tags[tag]] = tag;
@@ -30,8 +46,12 @@ class Enemy {
         rank,
         loot_list = [], 
         size = "small",
+		weapon = "none",
         add_to_bestiary = true,
         tags = [],
+        on_hit = (character) => { },
+        on_damaged = (character) => { },
+        on_death = (character) => { },
     }) {
                     
         this.name = name;
@@ -48,6 +68,7 @@ class Enemy {
             this.tags[tags[i]] = true;
         }
         this.tags[size] = true;
+		this.tags[weapon] = true;
 
         this.add_to_bestiary = add_to_bestiary; //generally set it false only for SOME of challenges and keep true for everything else
 
@@ -56,7 +77,16 @@ class Enemy {
         } else {
             this.size = size;
         }
+        if(weapon !== enemy_weapons.AXE && weapon !== enemy_weapons.SPEAR && weapon !== enemy_weapons.SWORD && weapon !== enemy_weapons.BOW && weapon !== enemy_weapons.NONE) {
+            throw new Error(`No such enemy weapon option as "${weapon}"!`);
+        } else {
+            this.weapon = weapon;
+        }
 
+        this.on_hit = on_hit;
+        this.on_damaged = on_damaged;
+        this.on_death = on_death;
+			
     }
     get_loot({drop_chance_modifier = 1} = {}) {
         // goes through items and calculates drops
@@ -108,34 +138,24 @@ class Enemy {
     
 
     */
-    enemy_templates["Starving wolf rat"] = new Enemy({
-        name: "Starving wolf rat",
-        description: "Rat with size of a dog, starved and weakened",
+    enemy_templates["Training dummy"] = new Enemy({
+        name: "Training dummy",
+        description: "A training dummy set up by your grandfather. Doesn't hit back",
         xp_value: 1,
         rank: 1,
-        size: "small",
-        tags: ["living", "beast", "wolf rat"],
-        stats: {health: 20, attack: 4, agility: 5, dexterity: 4, magic: 0, intuition: 5, attack_speed: 0.8, defense: 1},
-        loot_list: [
-            {item_name: "Rat tail", chance: 0.04},
-            {item_name: "Rat fang", chance: 0.04},
-            {item_name: "Rat pelt", chance: 0.01}
-        ]
+        size: enemy_sizes.MEDIUM,
+		tags: ["inanimate"],
+        stats: {health: 20, attack: 0.01, agility: 1, dexterity: 1, magic: 0, intuition: 0, attack_speed: 0.01, defense: 0},
     });
 
-    enemy_templates["Wolf rat"] = new Enemy({
-        name: "Wolf rat",
-        description: "Rat with size of a dog",
-        xp_value: 1,
+    enemy_templates["Revenant"] = new Enemy({
+        name: "Revenant",
+        description: "A corpse, reanimated via unknown means",
+        xp_value: 2,
         rank: 1,
-        size: "small",
-        tags: ["living", "beast", "wolf rat"],
-        stats: {health: 30, attack: 6, agility: 6, dexterity: 5, intuition: 6, magic: 0, attack_speed: 1, defense: 2},
-        loot_list: [
-            {item_name: "Rat tail", chance: 0.04},
-            {item_name: "Rat fang", chance: 0.04},
-            {item_name: "Rat pelt", chance: 0.01},
-        ]
+		size: enemy_sizes.MEDIUM,
+        tags: ["undead"],
+        stats: {health: 70, attack: 10, agility: 3, dexterity: 3, intuition: 0, magic: 0, attack_speed: 0.8, defense: 2},
     });
     enemy_templates["Elite wolf rat"] = new Enemy({
         name: "Elite wolf rat",
@@ -389,4 +409,4 @@ class Enemy {
     });
 })()
 
-export {Enemy, enemy_templates, enemy_killcount, tags_for_droprate_modifier_skills};
+export {Enemy, enemy_templates, enemy_killcount, tags_for_droprate_modifier_skills, enemy_tag_to_skill_mapping};

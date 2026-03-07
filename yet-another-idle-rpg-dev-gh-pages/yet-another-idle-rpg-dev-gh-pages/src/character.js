@@ -75,7 +75,7 @@ class Hero extends InventoryHaver {
                         unarmed_power: 1, //base damage for unarmed, as it has no weapon dmg to scale with
                         armor_penetration: 0,
                 };
-                this.name = "Hero";
+                this.name = "You";
                 this.titles = {};
                 this.stats = {
                         full: {...this.base_stats}, 

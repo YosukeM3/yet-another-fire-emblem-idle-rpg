@@ -263,23 +263,26 @@ const questManager = {
 
 //Main story quests
 (()=>{
-    quests["Lost memory"] = new Quest({
-        quest_name: "Lost memory",
+    quests["Training"] = new Quest({
+        quest_name: "Training",
         display_priority: 0,
         getQuestDescription: ()=>{
-            const completed_tasks =  quests["Lost memory"].getCompletedTaskCount(); 
+            const completed_tasks =  quests["Training"].getCompletedTaskCount(); 
             if(completed_tasks == 0) {
-                return "You woke up in some village and you have no idea how you got here or who you are. Just what could have happened?";
+                return "It's your birthday. Your grandfather promised to train you once this day came.";
             } else if(completed_tasks == 1) {
-                return "You lost your memories after being attacked by unknown assailants and were rescued by local villagers. You need to find out who, why, and if possible, how to recover them.";
+                return "At last, it's time to train!";
+            } else if(completed_tasks == 2) {
+                return "Not being allowed to leave the village saddens you, but...";
             }
         },
-        questline: "Lost memory",
+        questline: "Training",
         quest_tasks: [
-            new QuestTask({task_description: "Find out what happened"}), //talk to elder
+            new QuestTask({task_description: "Talk to your grandfather"}), //talk to elder
             new QuestTask({is_hidden: true}), //so that the 1st task is completed but the next is not yet displayed
-            new QuestTask({task_description: "Help with the wolf rat infestation"}), //talk to elder after dealing with them
-            new QuestTask({task_description: "Continue your search"}), //talk to suspicious guy
+            new QuestTask({task_description: "Begin your training"}), //talk to elder after dealing with them
+			new QuestTask({is_hidden: true}),
+            new QuestTask({task_description: "Leave the village"}), //talk to suspicious guy
             new QuestTask({task_description: "Get into the town (tbc)"}), //not yet possible
         ]
     });

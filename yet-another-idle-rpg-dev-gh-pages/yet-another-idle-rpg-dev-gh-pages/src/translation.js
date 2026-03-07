@@ -9,8 +9,8 @@ const translationManager = {
             //no text
             if(language.startsWith("mofu")) {
                 //it's fluffy => use non-fluffy instead if present, otherwise use english
-                if(translations[language.replace("mofu_","")]?.[text_id]) {
-                    language = language.replace("mofu_","");
+                if(translations[language.replace("english","")]?.[text_id]) {
+                    language = language.replace("english","");
                 } else {
                     language = "english";
                 }
@@ -31,42 +31,33 @@ const translationManager = {
 
 const translations = {
     english: {
-        "elder description": "You see an older man with white hair, but with a still strong posture as if still ready to fight if need be. He eyes you with curiosity.",
-        "elder hello": "Hello?",
-        "elder hello answ": "Hello. Glad to see you got better",
-        "elder head hurts": "My head hurts.. What happened?",
-        "elder head hurts answ": `Some of our people found you unconscious in the forest, wounded and with nothing but pants and an old sword, so they brought you to our village. `
-                + `It would seem you were on your way to a nearby town when someone attacked you and hit you really hard in the head.`,
-        "elder where": "Where am I?",
-        "elder where answ": `Some of our people found you unconscious in the forest, wounded and with nothing but pants and an old sword, so they brought you to our village. `
-                + `It would seem you were on your way to a nearby town when someone attacked you and hit you really hard in the head.`,
-        "elder remember": "I don't remember how I got here, what happened?",
-        "elder remember answ": `Some of our people found you unconscious in the forest, wounded and with nothing but pants and an old sword, so they brought you to our village. `
-                + `It would seem you were on your way to a nearby town when someone attacked you and hit you really hard in the head.`,
-        "elder who": "Who are you?",
-        "elder who answ": "I'm the unofficial leader of this village. If you have any questions, come to me",
-        "elder leave 1": "Great... Thank you for help, but I think I should go there then. Maybe it will help me remember more.",
-        "elder leave 1 answ": "Nearby lands are dangerous and you are still too weak to leave. Do you plan on getting ambushed again?",
-        "elder need to": "But I want to leave",
-        "elder need to answ": `You first need to recover, to get some rest and maybe also training, as you seem rather frail... Well, you know what? Killing a few wolf rats could be a good exercise. `
-                        +`You could help us clear some field of them, how about that?`,
-        "elder eq": "Is there any way I could get a weapon and proper clothes?",
-        "elder eq answ": `We don't have anything to spare, but you can check out our market. Just go over there *[points a direction]*, then turn right. It's nowhere near what you can find in a town, but people always have some gear, food, and other useful stuff to sell. `
-                        +`If you need money, try selling some rat remains there. Fangs, tails or pelts, people will buy them all. I have no idea what they do with this stuff...`,
-        "elder leave 2": "Can I leave the village?",
-        "elder leave 2 answ":  "We talked about this, you are still too weak",
-        "elder money": "Are there other ways to make money?",
-        "elder money answ": "You could help us with some fieldwork. I'm afraid it won't pay too well.",
-        "elder rats": "Are wolf rats a big issue?",
-        "elder rats answ": `Oh yes, quite a big one. Not literally, no, though they are much larger than normal rats... `
-                        +`They are a nasty vermin that's really hard to get rid of. And with their numbers they can be seriously life-threatening. `
-                        +`Only in a group though, single wolf rat is not much of a threat`,
-        "elder cleared 1":  "I cleared the field, just as you asked me to",
-        "elder cleared 1 answ": `You did? That's good. How about a stronger target? Nearby cave is just full of this vermin. Try yourself against whatever occupies the frontal room, and then also the deeper parts. `
-                        +`Before that, maybe get some sleep? Some folks prepared that shack over there for you. It's clean, it's dry, and it will give you some privacy. `
-                        +`Oh, and before I forget, our old craftsman wanted to talk to you.`,
-        "elder leave 3": "Can I leave the village?",
-        "elder leave 3 answ":  "You still need to get stronger.",
+        "Grandfather description": "Your grandfather stands strong, in spite of his age. His gray hair and moustache conceal a deceptively strong character.",
+        "Greet your grandfather": "Hello!",
+        "Grandfather greets back": "Ah, you're awake. And from what I can tell, you're rather eager. You've been waiting for this day, huh?",
+        "Enthusiastic response": "Of course!",
+        "Enthusiasm acknowledged": "Such enthusiasm! I left you some bread on the table. Once you're ready, come outside and we can begin.",
+        "Ready to train": "I'm ready!",
+        "Weapon choice": "Excellent. Now, I'd like you to select what kind of weapon you want to start with. You will be able to obtain other types of weapons later, though.",
+        "Choose sword": "I want to use a sword!",
+        "Weapon chosen": "Very well. It's a good thing I bought spares of all types... I wasn't sure of which weapon you'd choose.",
+        "Choose spear": "I want to use a spear!",
+        "Choose axe": "I want to use an axe!",
+        "Choose bow": "I want to use a bow!",
+        "Finished training": "I did it, grandpa!",
+        "Proud grandfather": "Well done. You're only now just starting, but I can feel like you'll become very strong in the future. \n [He says, with a smile]",
+        "Eager to leave": "That means I can leave the village, right?",
+        "Stern grandfather": "[Your grandfather's expression turns stern all of a sudden] \n No. Not yet. These dummies may not hit back, but real opponents will. I will not let you risk your life like that. Bandits and Terrors have been showing up everywhere...",
+        "Insist": "But grandpa--",
+        "Angry grandfather": "No! I will NOT allow it! I taught you to fight so you can someday travel the world and fend for yourself, but that is not yet the day. \n ...Go play for a bit now, but please don't think about leaving. You're still too inexperienced. \n [Your grandfather calms down and enters the house]",
+        "Village guard description":  "You see a tall, bearded man clad in heavy armor. He's carrying a shield, an axe, and a stern expression.",
+        "Ask to leave": "Hello, could I leave the village?",
+        "Guard greets you": "Hm? Oh, you're the old man's grandchild. Did he give you his blessing to leave the village?",
+        "Lie to the guard": "Yes!",
+        "Guard falls for it": "Good job! You must have impressed the old man for him to let you leave. You may pass, but beware. You might find Terrors nearby.",
+        "Ask grandfather":  "How's everything going, Grandpa?",
+        "All good": "Everything's okay. \n Play for a little longer, but don't leave the village, alright?",
+        "Guard check": "Hey, have you seen anything interesting lately?",
+        "Nothing to report":  "I'm afraid not. Not that I'm complaining though, I'm content with our village being so peaceful.",
         "elder room clear": "I dealt with some rats in the cave, but is there anything else to help with?",
         "elder room clear answ": "Ahh, good to hear you are making progress. Let me think... Could you check on the eastern mill? I'm a bit worried if the two kids running it can manage everything by themselves.",
         "elder cave clear":  "I cleared the cave. Most of it, at least",
