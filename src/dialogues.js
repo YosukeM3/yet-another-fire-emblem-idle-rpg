@@ -137,10 +137,8 @@ class DialogueAction extends GameAction {
                     quest_progress: [{quest_id: "Training", task_index: 0}],
                     items: [{item: "Fresh bread", count: 5}],
 					locations: [{location: "Village"}],
+					locks: {dialogues: ["Grandfather 1"]},
                 },
-				locks: {
-					dialogues: ["Grandfather 1"]
-				},
             }),
             "Checking": new Textline({
                 name: "Ask grandfather",
@@ -230,10 +228,8 @@ class DialogueAction extends GameAction {
                 rewards: {
 					textlines: [{dialogue: "Grandfather 1", lines: ["Checking"]}],
                     dialogues: ["Village gate guard"],
+					locks: {dialogues: ["Grandfather 1"]},
                 },
-				locks: {
-					dialogues: ["Grandfather 2"]
-				},
             })
         },
         description: "Grandfather description",
@@ -260,11 +256,9 @@ class DialogueAction extends GameAction {
                 rewards: {
                     textlines: [{dialogue: "Village gate guard", lines: ["Village guard line 3"]}],
 					locations: [{location: "Forest road"}],
+					locks: {dialogues: ["Grandfather 1"]},
                 },
                 locks_lines: ["Village guard line 2"],
-				locks: {
-					dialogues: ["Grandfather 1"]
-				}
             }),
             "Village guard line 3": new Textline({
                 name: "Guard check",
