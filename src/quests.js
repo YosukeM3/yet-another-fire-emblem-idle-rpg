@@ -275,6 +275,8 @@ const questManager = {
             } else if(completed_tasks == 2) {
                 return "Not being allowed to leave the village saddens you, but...";
             } else if(completed_tasks == 3) {
+				return "Not being allowed to leave the village saddens you, but...";
+			} else if(completed_tasks == 4) {
 				return "Let's explore!";
 			}
         },

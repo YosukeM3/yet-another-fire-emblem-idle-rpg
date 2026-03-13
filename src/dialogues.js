@@ -257,7 +257,10 @@ class DialogueAction extends GameAction {
                     textlines: [{dialogue: "Village gate guard", lines: ["Village guard line 3"]}],
 					locations: [{location: "Forest road"}],
 					locks: {dialogues: ["Grandfather 1"]},
-                    quest_progress: [{quest_id: "Training", task_index: 2}],
+                    quest_progress: [
+						{quest_id: "Training", task_index: 2},
+						{quest_id: "Training", task_index: 3},
+						],
                 },
                 locks_lines: ["Village guard line 2"],
             }),
