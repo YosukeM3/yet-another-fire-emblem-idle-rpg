@@ -830,6 +830,9 @@ function get_location_type_penalty(type, stage, stat, category) {
         parent_location: locations["Village"],
         first_reward: {
             xp: 10,
+            quest_progress: [
+                {quest_id: "Training", task_index: 1},
+            ],
         },
         repeatable_reward: {
 /*            textlines: [
@@ -1804,7 +1807,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
             activity_name: "running",
             infinite: true,
             starting_text: "Go for a run through the forest",
-            skill_xp_per_tick: 4,
+            skill_xp_per_tick: 1,
         }),
         "woodcutting": new LocationActivity({
             activity_name: "woodcutting",

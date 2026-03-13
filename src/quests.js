@@ -274,16 +274,17 @@ const questManager = {
                 return "At last, it's time to train!";
             } else if(completed_tasks == 2) {
                 return "Not being allowed to leave the village saddens you, but...";
-            }
+            } else if(completed_tasks == 3) {
+				return "Let's explore!";
+			}
         },
         questline: "Training",
         quest_tasks: [
             new QuestTask({task_description: "Talk to your grandfather"}), //talk to elder
-            new QuestTask({is_hidden: true}), //so that the 1st task is completed but the next is not yet displayed
             new QuestTask({task_description: "Begin your training"}), //talk to elder after dealing with them
 			new QuestTask({is_hidden: true}),
             new QuestTask({task_description: "Leave the village"}), //talk to suspicious guy
-            new QuestTask({task_description: "Get into the town (tbc)"}), //not yet possible
+            new QuestTask({task_description: "Explore!"}), //not yet possible
         ]
     });
 
@@ -383,7 +384,7 @@ const questManager = {
 
 //Hidden quests for unlocks
 (()=>{
-    quests["Swimming/climbing unlock"] = new Quest({
+/*    quests["Swimming/climbing unlock"] = new Quest({
         //climbing can still be unlocked via fights in the cave
         is_hidden: true,
         quest_tasks: [
@@ -433,7 +434,7 @@ const questManager = {
                 }
             }),
         ],
-    });
+    });*/
 })();
 
 /*
