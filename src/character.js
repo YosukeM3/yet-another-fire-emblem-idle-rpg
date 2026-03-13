@@ -135,7 +135,7 @@ class Hero extends InventoryHaver {
                         arms: null, ring: null, 
                         weapon: null, "off-hand": null,
                         legs: null, feet: null, 
-                        amulet: null, artifact: null,
+                        job: null, artifact: null,
                         cape: null,
                 
                         axe: null, 

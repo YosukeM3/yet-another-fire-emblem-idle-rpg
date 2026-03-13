@@ -823,7 +823,7 @@ function get_location_type_penalty(type, stage, stat, category) {
         description: "Your grandfather set up some training dummies right outside the house.", 
         enemy_count: 5, 
         enemies_list: ["Training dummy"],
-        types: [{type: "open", stage: 1, xp_gain: 1}],
+//        types: [{type: "open", stage: 1, xp_gain: 1}],
         enemy_stat_variation: 0,
         is_unlocked: false, 
         name: "Training area", 
@@ -846,7 +846,7 @@ function get_location_type_penalty(type, stage, stat, category) {
             }
         ]
     });
-    locations["Village"].connected_locations.push({location: locations["Training area"], travel_time: 15});
+    locations["Village"].connected_locations.push({location: locations["Training area"], travel_time: 5});
 
     locations["Nearby cave"] = new Location({ 
         connected_locations: [{location: locations["Village"], custom_text: "Go outside and to the [Village]", travel_time: 60}], 
@@ -1084,7 +1084,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
     locations["Nearby cave"].connected_locations.push({location: locations["Mysterious depths"], custom_text: "Climb down to [Mysterious depths]", travel_time: 120});
 
     locations["Forest road"] = new Location({ 
-        connected_locations: [{location: locations["Village"], travel_time: 240}],
+        connected_locations: [{location: locations["Village"], travel_time: 15}],
         description: "An old path leading through a forest. You have no idea what lies beyond this, but the recent rumors of Terrors don't give you the impression that this is a safe place.",
         name: "Forest road",
         getBackgroundNoises: function() {
@@ -1094,7 +1094,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
         },
         is_unlocked: false,
     });
-    locations["Village"].connected_locations.push({location: locations["Forest road"], custom_text: "Leave the village towards [Forest road]", travel_time: 240});
+    locations["Village"].connected_locations.push({location: locations["Forest road"], custom_text: "Leave the village towards [Forest road]", travel_time: 15});
 
     locations["Forest"] = new Combat_zone({
         description: "Forest to the east of the village. Smells putrid.", 
@@ -1113,7 +1113,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
 //            activities: [{location:"Forest road", activity: "herbalism"}],
         },
     });
-    locations["Forest road"].connected_locations.push({location: locations["Forest"], custom_text: "Leave the safe path and walk into the [Forest]", travel_time: 30});
+    locations["Forest road"].connected_locations.push({location: locations["Forest"], custom_text: "Leave the safe path and walk into the [Forest]", travel_time: 15});
 
     locations["Deep forest"] = new Combat_zone({
         description: "Deeper part of the forest, a dangerous place", 
@@ -1246,7 +1246,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
         is_unlocked: true,
         dialogues: ["gate guard"],
     });
-    locations["Forest road"].connected_locations.push({location: locations["Town outskirts"], custom_text: "Go towards the [Town outskirts]", travel_time: 240});
+//    locations["Forest road"].connected_locations.push({location: locations["Town outskirts"], custom_text: "Go towards the [Town outskirts]", travel_time: 240});
 
     locations["Slums"] = new Location({ 
         connected_locations: [{location: locations["Town outskirts"], travel_time: 60}],

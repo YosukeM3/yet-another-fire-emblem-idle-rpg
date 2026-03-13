@@ -137,7 +137,7 @@ class DialogueAction extends GameAction {
                     quest_progress: [{quest_id: "Training", task_index: 0}],
                     items: [{item: "Fresh bread", count: 5}],
 					locations: [{location: "Village"}],
-					locks: {dialogues: ["Grandfather 1"]},
+//					locks: {dialogues: ["Grandfather 1"]},
                 },
             }),
             "Checking": new Textline({
@@ -168,7 +168,7 @@ class DialogueAction extends GameAction {
                 is_unlocked: false,
                 locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
                 rewards: {
-                    items: ["Sword Trainee", {item: "Training sword", quality: 100}],
+                    items: ["Squire", {item: "Training sword", quality: 100}],
 					locations: [{location: "Training area"}],
                 },
             }),
@@ -178,7 +178,7 @@ class DialogueAction extends GameAction {
                 is_unlocked: false,
                 locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
                 rewards: {
-                    items: ["Spear Trainee", {item: "Training spear", quality: 100}],
+                    items: ["Recruit", {item: "Training spear", quality: 100}],
 					locations: [{location: "Training area"}],
                 },
             }),
@@ -188,7 +188,7 @@ class DialogueAction extends GameAction {
                 is_unlocked: false,
                 locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
                 rewards: {
-                    items: ["Axe Trainee", {item: "Training axe", quality: 100}],
+                    items: ["Journeyman", {item: "Training axe", quality: 100}],
 					locations: [{location: "Training area"}],
                 },
             }),
@@ -198,7 +198,7 @@ class DialogueAction extends GameAction {
                 is_unlocked: false,
                 locks_lines: ["Grandfather line 4.1", "Grandfather line 4.2", "Grandfather line 4.3", "Grandfather line 4.4"],
                 rewards: {
-                    items: ["Bow Trainee", {item: "Training bow", quality: 100}],
+                    items: ["Nimrod", {item: "Training bow", quality: 100}],
 					locations: [{location: "Training area"}],
                 },
             }),
@@ -228,7 +228,7 @@ class DialogueAction extends GameAction {
                 rewards: {
 					textlines: [{dialogue: "Grandfather 1", lines: ["Checking"]}],
                     dialogues: ["Village gate guard"],
-					locks: {dialogues: ["Grandfather 1"]},
+					locks: {dialogues: ["Grandfather 2"]},
                 },
             })
         },

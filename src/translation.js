@@ -32,7 +32,7 @@ const translationManager = {
 const translations = {
     english: {
         "Grandfather description": "Your grandfather stands strong, in spite of his age. His gray hair and moustache conceal a deceptively strong character.",
-        "Greet your grandfather": "Hello!",
+        "Greet your grandfather": "Good morning!",
         "Grandfather greets back": "Ah, you're awake. And from what I can tell, you're rather eager. You've been waiting for this day, huh?",
         "Enthusiastic response": "Of course!",
         "Enthusiasm acknowledged": "Such enthusiasm! I left you some bread on the table. Once you're ready, come outside and we can begin.",
@@ -48,7 +48,7 @@ const translations = {
         "Eager to leave": "That means I can leave the village, right?",
         "Stern grandfather": "[Your grandfather's expression turns stern all of a sudden] \n No. Not yet. These dummies may not hit back, but real opponents will. I will not let you risk your life like that. Bandits and Terrors have been showing up everywhere...",
         "Insist": "But grandpa--",
-        "Angry grandfather": "No! I will NOT allow it! I taught you to fight so you can someday travel the world and fend for yourself, but that is not yet the day. \n ...Go play for a bit now, but please don't think about leaving. You're still too inexperienced. \n [Your grandfather calms down and enters the house]",
+        "Angry grandfather": "No! I will NOT allow it! I agreed to teach you how to fight so you can someday travel the world and fend for yourself, but you are not yet ready. \n ...Go play for a bit now, but please don't think about leaving. You're still too inexperienced. \n [Your grandfather calms down and enters the house]",
         "Village guard description":  "You see a tall, bearded man clad in heavy armor. He's carrying a shield, an axe, and a stern expression.",
         "Ask to leave": "Hello, could I leave the village?",
         "Guard greets you": "Hm? Oh, you're the old man's grandchild. Did he give you his blessing to leave the village?",

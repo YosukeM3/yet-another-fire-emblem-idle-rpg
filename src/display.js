@@ -192,7 +192,7 @@ const equipment_slots_divs = {head: document.getElementById("head_slot"), torso:
                               arms: document.getElementById("arms_slot"), ring: document.getElementById("ring_slot"),
                               weapon: document.getElementById("weapon_slot"), "off-hand": document.getElementById("off-hand_slot"),
                               legs: document.getElementById("legs_slot"), feet: document.getElementById("feet_slot"),
-                              class: document.getElementById("amulet_slot"), artifact: document.getElementById("artifact_slot"),
+                              job: document.getElementById("amulet_slot"), artifact: document.getElementById("artifact_slot"),
                               cape: document.getElementById("cape_slot"),
                               pickaxe: document.getElementById("pickaxe_slot"),
                               axe: document.getElementById("axe_slot"),

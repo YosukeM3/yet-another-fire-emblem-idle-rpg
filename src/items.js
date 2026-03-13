@@ -907,12 +907,12 @@ class Cape extends Equippable {
 class Amulet extends Equippable {
     constructor(item_data) {
         super(item_data);
-        this.equip_slot = "class";
+        this.equip_slot = "job";
         this.stats = item_data.stats;
 
         this.ignore_quality = true;
 
-        this.tags["class"] = true;
+        this.tags["job"] = true;
         if(!this.id) {
             this.id = this.getName();
         }
@@ -1013,7 +1013,7 @@ function getItem(item_data) {
                     return new Tool(item_data);
                 case "cape":
                     return new Cape(item_data);
-                case "class":
+                case "job":
                     return new Amulet(item_data);
                 default:
                     return new Armor(item_data);
@@ -1615,7 +1615,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["PlaceholderSpear"] = new WeaponComponent({
         name: "Wooden spear tip", description: "Simple spear tip made out of wood, perfect for training",
         component_type: "spear tip",
-        value: 0,
+        value: 16,
         component_tier: 1,
         name_prefix: "Training",
 		set_quality: 100,
@@ -1628,7 +1628,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["PlaceholderAxe"] = new WeaponComponent({
         name: "Wooden axe head", description: "Simple axe head made out of wood, suitable for practicing",
         component_type: "axe head",
-        value: 0,
+        value: 32,
         name_prefix: "Training",
 		set_quality: 100,		
         component_tier: 1,
@@ -1655,7 +1655,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["PlaceholderBow"] = new WeaponComponent({
         name: "Wooden bow grip", description: "Simple bow grip made out of wood, good for honing your skills",
         component_type: "bow grip",
-        value: 0,
+        value: 48,
         name_prefix: "Training",
 		set_quality: 100,
         component_tier: 1,
@@ -1664,7 +1664,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["PlaceholderSword"] = new WeaponComponent({
         name: "Wooden blade", description: "Simple blade made out of wood, excellent for sparring",
         component_type: "blade",
-        value: 0,
+        value: 64,
         name_prefix: "Training",
 		set_quality: 100,
         component_tier: 1,
@@ -1691,28 +1691,28 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple short hilt"] = new WeaponComponent({
         name: "Simple short hilt", description: "A short handle suitable for a sword",
         component_type: "short handle",
-        value: 8,
+        value: 16,
 		set_quality: 100,
         component_tier: 1,
     });
     item_templates["Simple bowstring"] = new WeaponComponent({
         name: "Simple bowstring", description: "A bowstring made for...a bow",
         component_type: "bowstring",
-        value: 12,
+        value: 32,
 		set_quality: 100,
         component_tier: 1,
     });
     item_templates["Simple medium handle"] = new WeaponComponent({
         name: "Simple medium handle", description: "A medium handle that could be used for an axe",
         component_type: "medium handle",
-        value: 16,
+        value: 48,
 		set_quality: 100,
         component_tier: 1,
     });
     item_templates["Simple long shaft"] = new WeaponComponent({
         name: "Simple long shaft", description: "A long shaft made for a spear",
         component_type: "long handle",
-        value: 20,
+        value: 64,
 		set_quality: 100,
         component_tier: 1,
     });
@@ -3360,8 +3360,7 @@ book_stats["A Glint On The Sand"] = new BookData({
 
 //amulets:
 (function(){
-    item_templates["Sword Trainee"] = new Amulet({
-		name: "Squire",
+    item_templates["Squire"] = new Amulet({
 		description: "Tier 0 class, oriented towards swords",
         value: 0,
         tags: {unique: true, unsellable: true},
@@ -3371,15 +3370,10 @@ book_stats["A Glint On The Sand"] = new BookData({
             },
             agility: {
                 multiplier: 1.05,
-            },
+            }
         },
-        xp_multipliers: {
-            Swords: 1.05,
-        }
     });
-	
-    item_templates["Spear Trainee"] = new Amulet({
-		name: "Recruit",
+    item_templates["Recruit"] = new Amulet({
 		description: "Tier 0 class, oriented towards spears",
         value: 0,
         tags: {unique: true, unsellable: true},
@@ -3389,15 +3383,10 @@ book_stats["A Glint On The Sand"] = new BookData({
             },
             defense: {
                 multiplier: 1.05,
-            },
+            }
         },
-        xp_multipliers: {
-            Spears: 1.05,
-        }
     });
-	
-    item_templates["Axe Trainee"] = new Amulet({
-		name: "Journeyman",
+    item_templates["Journeyman"] = new Amulet({
 		description: "Tier 0 class, oriented towards axes",
         value: 0,
         tags: {unique: true, unsellable: true},
@@ -3407,15 +3396,10 @@ book_stats["A Glint On The Sand"] = new BookData({
             },
             max_health: {
                 multiplier: 1.05,
-            },
+            }
         },
-        xp_multipliers: {
-            Axes: 1.05,
-        }
     });
-
-    item_templates["Bow Trainee"] = new Amulet({
-		name: "Nimrod",
+    item_templates["Nimrod"] = new Amulet({
 		description: "Tier 0 class, oriented towards bows",
         value: 0,
         tags: {unique: true, unsellable: true},
@@ -3425,11 +3409,8 @@ book_stats["A Glint On The Sand"] = new BookData({
             },
             crit_rate: {
                 flat: 0.01,
-            },
+            }
         },
-        xp_multipliers: {
-            Bows: 1.05,
-        }
     });
 })();
 

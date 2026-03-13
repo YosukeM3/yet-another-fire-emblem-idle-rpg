@@ -15,10 +15,10 @@ const weapon_type_to_skill = {
 };
 
 const class_to_skill = {
-	"Sword Trainee": "Squire",
-	"Spear Trainee": "Recruit",
-	"Axe Trainee": "Journeyman",
-	"Bow Trainee": "Nimrod"
+	"Squire": "Squire",
+	"Recruit": "Recruit",
+	"Journeyman": "Journeyman",
+	"Nimrod": "Nimrod"
 };
 
 //for display foldering and for different treatment when it comes to xp gain caps
@@ -695,28 +695,28 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                     names: {0: "Squire"}, 
                                     description: "A title earned by those who have begun studying the blade",
 									base_xp_cost: 35,
-                                    category: "Class",
+                                    category: "Job",
                                     max_level: 20,
                                 });
     skills["Recruit"] = new Skill({
                                     names: {0: "Recruit"}, 
                                     description: "A title earned by those who have taken up the spear",
 									base_xp_cost: 35,
-                                    category: "Class",
+                                    category: "Job",
                                     max_level: 20,
                                 });
     skills["Journeyman"] = new Skill({
                                     names: {0: "Journeyman"}, 
                                     description: "A title earned by those who have begun to learn to use an axe",
 									base_xp_cost: 35,
-                                    category: "Class",
+                                    category: "Job",
                                     max_level: 20,
                                 });
     skills["Nimrod"] = new Skill({
                                     names: {0: "Nimrod"}, 
                                     description: "A title earned by those who have decided to pick up a bow",
 									base_xp_cost: 35,
-                                    category: "Class",
+                                    category: "Job",
                                     max_level: 20,
                                 });         
                                
@@ -1180,7 +1180,7 @@ Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"
                                 milestones: {
                                     1: {
                                         stats: {
-                                            "dexterity": {flat: 1},
+                                            "strength": {flat: 1},
                                         }
                                     },
                                     3: {
@@ -1207,7 +1207,7 @@ Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"
                                     },
                                     12: {
                                         stats: {
-                                            "dexterity": {flat: 2},
+                                            "strength": {flat: 2},
                                         }
                                     },
                                 },
@@ -1230,7 +1230,7 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                     },
                                     3: {
                                         stats: {
-                                            "dexterity": {flat: 1},
+                                            "agility": {flat: 1},
                                         }
                                     },
                                     5: {
@@ -1252,7 +1252,7 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                     },
                                     12: {
                                         stats: {
-                                            "dexterity": {flat: 2},
+                                            "agility": {flat: 2},
                                         }
                                     },
                                 },
@@ -1271,7 +1271,7 @@ Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"
                                         milestones: {
                                             1: {
                                                 stats: {
-                                                    "strength": {flat: 1},
+                                                    "dexterity": {flat: 1},
                                                 }
                                             },
                                             3: {
@@ -1281,19 +1281,19 @@ Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"
                                             },
                                             5: {
                                                 stats: {
-                                                    "strength": {flat: 1},
+                                                    "crit_rate": {flat: 0.01},
                                                     "dexterity": {flat: 1},
                                                 },
                                             },
                                             7: {
                                                 stats: {
-                                                    "strength": {flat: 1},
+                                                    "dexterity": {flat: 1},
                                                 }
                                             },
                                             10: {
                                                 stats: {
                                                     "strength": {flat: 1},
-                                                    "dexterity": {flat: 1}, 
+                                                    "crit_multiplier": {flat: 0.1},
                                                 },
                                             },
                                             12: {

@@ -154,8 +154,8 @@ class Enemy {
         xp_value: 2,
         rank: 1,
 		size: enemy_sizes.MEDIUM,
-        tags: ["undead"],
-        stats: {health: 70, attack: 10, agility: 3, dexterity: 3, intuition: 0, magic: 0, attack_speed: 0.8, defense: 2},
+        tags: ["undead", "monster"],
+        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
     });
     enemy_templates["Elite wolf rat"] = new Enemy({
         name: "Elite wolf rat",
