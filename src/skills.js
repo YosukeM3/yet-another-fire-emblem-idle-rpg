@@ -1265,7 +1265,7 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                 category: "Weapon",
                                 description: "The art of landing the most improbable shots.", 
                                 get_effect_description: ()=> {
-                                    return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})*1000)/1000}.
+                                    return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
                                 milestones: {
