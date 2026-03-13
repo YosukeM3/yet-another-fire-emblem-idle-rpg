@@ -1260,50 +1260,50 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                             });
 
     skills["Bows"] = new Skill({ 
-                                        parent_skill: "Weapon mastery",
-                                        names: {0: "Marksmanship"}, 
-                                        category: "Weapon",
-                                        description: "?", 
-                                        get_effect_description: ()=> {
-                                            return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})*1000)/1000}.
+                                parent_skill: "Weapon mastery",
+                                names: {0: "Marksmanship"}, 
+                                category: "Weapon",
+                                description: "The art of landing the most improbable shots.", 
+                                get_effect_description: ()=> {
+                                    return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Hammers",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
+                                },
+                                milestones: {
+                                    1: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    3: {
+                                        stats: {
+                                            "strength": {flat: 1},
+                                        }
+                                    },
+                                    5: {
+                                        stats: {
+                                            "crit_rate": {flat: 0.01},
+                                            "dexterity": {flat: 1},
                                         },
-                                        milestones: {
-                                            1: {
-                                                stats: {
-                                                    "dexterity": {flat: 1},
-                                                }
-                                            },
-                                            3: {
-                                                stats: {
-                                                    "strength": {flat: 1},
-                                                }
-                                            },
-                                            5: {
-                                                stats: {
-                                                    "crit_rate": {flat: 0.01},
-                                                    "dexterity": {flat: 1},
-                                                },
-                                            },
-                                            7: {
-                                                stats: {
-                                                    "dexterity": {flat: 1},
-                                                }
-                                            },
-                                            10: {
-                                                stats: {
-                                                    "strength": {flat: 1},
-                                                    "crit_multiplier": {flat: 0.1},
-                                                },
-                                            },
-                                            12: {
-                                                stats: {
-                                                    "dexterity": {flat: 2},
-                                                }
-                                            },
+                                    },
+                                    7: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    10: {
+                                        stats: {
+                                            "strength": {flat: 1},
+                                            "crit_multiplier": {flat: 0.1},
                                         },
-                                        max_level_coefficient: 8
-                                    });
+                                    },
+                                    12: {
+                                        stats: {
+                                            "dexterity": {flat: 2},
+                                        }
+                                    },
+                                },
+                                max_level_coefficient: 8
+                            });
 
     skills["Daggers"] = new Skill({
                                 parent_skill: "Weapon mastery",
