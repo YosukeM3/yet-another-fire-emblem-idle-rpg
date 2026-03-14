@@ -1103,9 +1103,9 @@ There's another gate on the wall in front of you, but you have a strange feeling
         description: "Forest to the east of the village. Smells putrid.", 
         enemies_list: ["Revenant"],
         types: [{type: "narrow", stage: 1, xp_gain: 1}],
-        enemy_count: 30, 
+        enemy_count: 10, 
         enemy_stat_variation: 0.2,
-        name: "Forest", 
+        name: "Forest",
         parent_location: locations["Forest road"],
         first_reward: {
             xp: 20,

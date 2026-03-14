@@ -689,35 +689,39 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                     }});
 })();
 
-//class skills
+//job skills
 (function(){
     skills["Squire"] = new Skill({
                                     names: {0: "Squire"}, 
                                     description: "A title earned by those who have begun studying the blade",
-									base_xp_cost: 35,
+									base_xp_cost: 50,
+									xp_scaling: 2,
                                     category: "Job",
-                                    max_level: 20,
+                                    max_level: 10,
                                 });
     skills["Recruit"] = new Skill({
                                     names: {0: "Recruit"}, 
                                     description: "A title earned by those who have taken up the spear",
-									base_xp_cost: 35,
+									base_xp_cost: 50,
+									xp_scaling: 2,
                                     category: "Job",
-                                    max_level: 20,
+                                    max_level: 10,
                                 });
     skills["Journeyman"] = new Skill({
                                     names: {0: "Journeyman"}, 
                                     description: "A title earned by those who have begun to learn to use an axe",
-									base_xp_cost: 35,
+									base_xp_cost: 50,
+									xp_scaling: 2,
                                     category: "Job",
-                                    max_level: 20,
+                                    max_level: 10,
                                 });
     skills["Nimrod"] = new Skill({
                                     names: {0: "Nimrod"}, 
                                     description: "A title earned by those who have decided to pick up a bow",
-									base_xp_cost: 35,
+									base_xp_cost: 50,
+									xp_scaling: 2,
                                     category: "Job",
-                                    max_level: 20,
+                                    max_level: 10,
                                 });         
                                
 })();
@@ -1202,7 +1206,7 @@ Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"
                                     },
                                     10: {
                                         stats: {
-                                                "strength": {multiplier: 1.05},
+                                            "strength": {multiplier: 1.05},
                                         },
                                     },
                                     12: {

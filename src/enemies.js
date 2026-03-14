@@ -145,13 +145,13 @@ class Enemy {
         rank: 1,
         size: enemy_sizes.MEDIUM,
 		tags: ["inanimate"],
-        stats: {health: 20, attack: 0.01, agility: 1, dexterity: 1, magic: 0, intuition: 0, attack_speed: 0.01, defense: 0},
+        stats: {health: 20, attack: 0.000001, agility: 1, dexterity: 1, magic: 0, intuition: 0, attack_speed: 0.000001, defense: 0},
     });
 
     enemy_templates["Revenant"] = new Enemy({
         name: "Revenant",
         description: "A corpse, reanimated via unknown means",
-        xp_value: 2,
+        xp_value: 1,
         rank: 1,
 		size: enemy_sizes.MEDIUM,
         tags: ["undead", "monster"],
