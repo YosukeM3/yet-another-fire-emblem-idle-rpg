@@ -254,7 +254,8 @@ class DialogueAction extends GameAction {
                 text: "Guard falls for it",
                 is_unlocked: false,
                 rewards: {
-                    textlines: [{dialogue: "Village gate guard", lines: ["Village guard line 3"]}],
+                    textlines: [
+					{dialogue: "Village gate guard", lines: ["Village guard line 3", "Village guard line 4"]}],
 					locations: [{location: "Forest road"}],
 					locks: {dialogues: ["Grandfather 1"]},
                     quest_progress: [
@@ -267,6 +268,11 @@ class DialogueAction extends GameAction {
             "Village guard line 3": new Textline({
                 name: "Guard check",
                 text: "Nothing to report",
+                is_unlocked: false,
+            }),
+            "Village guard line 4": new Textline({
+                name: "Ask for advice",
+                text: "Triangle explanation",
                 is_unlocked: false,
             })
         },
