@@ -718,7 +718,7 @@ function get_location_type_penalty(type, stage, stat, category) {
         },
 		description: "A small, remote village. To the south and west is a large, perhaps endless sea, and little to nothing to the north. The only exit, towards the east, leads to a forest.",
         dialogues: ["Grandfather 2", "Village gate guard"],
-//        traders: ["village trader"],
+        traders: ["village trader"],
         market_region: "Village",
         name: "Village", 
 		is_unlocked: false,
@@ -1115,35 +1115,78 @@ There's another gate on the wall in front of you, but you have a strange feeling
 //            locations: [{location:"Deep forest"}],
 //            activities: [{location:"Forest road", activity: "herbalism"}],
         },
+        rewards_with_clear_requirement: [
+            {
+                required_clear_count: 3,
+                locations: [
+				{location: "Cemetery"},
+				{location: "Cave entrance"},
+				]
+            }
+        ],
     });
     locations["Forest road"].connected_locations.push({location: locations["Forest"], custom_text: "Leave the safe path and walk into the [Forest]", travel_time: 15});
 
-    locations["Deep forest"] = new Combat_zone({
-        description: "Deeper part of the forest, a dangerous place", 
-        enemies_list: ["Wolf", "Starving wolf", "Young wolf"],
+    locations["Cemetery"] = new Combat_zone({
+        description: "An old, abandoned cemetery where the undead thrive", 
+        enemies_list: ["Revenant", "Revenant", "Revenant", "Revenant", "Revenant", "Revenant", "Revenant", "Revenant", "Revenant", "Mummy"],
         types: [{type: "narrow", stage: 1, xp_gain: 2}],
-        enemy_count: 50, 
-        enemy_group_size: [2,3],
+        enemy_count: 20, 
+        enemy_group_size: [2,2],
         enemy_stat_variation: 0.2,
         is_unlocked: false,
-        name: "Deep forest", 
+        name: "Cemetery", 
         parent_location: locations["Forest road"],
         first_reward: {
-            xp: 70,
+            xp: 30,
         },
         repeatable_reward: {
-            xp: 35,
-            flags: ["is_strength_proved"],
-            activities: [{location:"Forest road", activity: "woodcutting"}],
+            xp: 15,
+//            flags: ["is_strength_proved"],
+//            activities: [{location:"Forest road", activity: "woodcutting"}],
         },
-        rewards_with_clear_requirement: [
+/*        rewards_with_clear_requirement: [
             {
                 required_clear_count: 4,
                 actions: [{action: "follow the trail", location:"Forest road"}]
             }
-        ],
+        ],*/
     });
-    locations["Forest road"].connected_locations.push({location: locations["Deep forest"], custom_text: "Venture into the [Deep forest]", travel_time: 60});
+    locations["Forest road"].connected_locations.push({location: locations["Cemetery"], custom_text: "Go to the [Cemetery]", travel_time: 30});
+
+    locations["Cave entrance"] = new Location({ 
+        connected_locations: [{location: locations["Forest"], travel_time: 30}],
+        description: "Following the path led you to a cave. While the path continues further, you feel like you should check the cave out before advancing any more.",
+        name: "Cave entrance",
+        getBackgroundNoises: function() {
+            let noises = ["*You hear footsteps coming from inside the cave, but no one comes out.*"];
+
+            return noises;
+        },
+        is_unlocked: false,
+    });
+    locations["Forest road"].connected_locations.push({location: locations["Cave entrance"], custom_text: "Follow the path further", travel_time: 30});	
+
+    locations["First cave room"] = new Combat_zone({
+        description: "After entering the cave, you are ambushed by bandits!", 
+        enemy_count: 10, 
+        types: [{type: "narrow", stage: 1, xp_gain: 2}],
+        enemies_list: ["Weak brigand [AXE]"],
+        enemy_group_size: [1,1],
+        enemy_stat_variation: 0.1,
+//        is_unlocked: false, 
+        name: "First cave room", 
+        leave_text: "Run away for now",
+        parent_location: locations["Cave entrance"],
+        first_reward: {
+            xp: 50,
+        },
+		repeatable_reward: {
+			xp: 25,
+		},
+    });
+
+    locations["Cave entrance"].connected_locations.push({location: locations["First cave room"], custom_text: "Enter the cave!", travel_time: 0});
 
     locations["Forest clearing"] = new Combat_zone({
         description: "A surprisingly big clearing hidden in the northern part of the forest, covered with very tall grass and filled with a mass of wild boars",
@@ -1621,6 +1664,23 @@ There's another gate on the wall in front of you, but you have a strange feeling
         unlock_text: "Defend yourself!"
     });
     locations["Slums"].connected_locations.push({location: locations["Fight off the assailant"], custom_text: "Fight off the suspicious man", travel_time: 0});
+
+/*    locations["First cave room"] = new Challenge_zone({
+        description: "After entering the cave, you are ambushed by bandits!", 
+        enemy_count: 3, 
+        types: [{type: "narrow", stage: 1, xp_gain: 2}],
+        enemies_list: ["Weak brigand [AXE]"],
+        enemy_group_size: [1,1],
+        enemy_stat_variation: 0.1,
+//        is_unlocked: false, 
+        name: "First cave room", 
+        leave_text: "Run away for now",
+        parent_location: locations["Cave entrance"],
+        first_reward: {
+            xp: 40,
+        },
+    });
+    locations["Cave entrance"].connected_locations.push({location: locations["First cave room"], custom_text: "Enter the cave!", travel_time: 0});*/
 
     locations["Fight the angry mountain goat"] = new Challenge_zone({
         description: "It won't let you pass...",

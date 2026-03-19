@@ -142,7 +142,7 @@ class Enemy {
         name: "Training dummy",
         description: "A training dummy set up by your grandfather. Doesn't hit back",
         xp_value: 1,
-        rank: 1,
+        rank: 3,
         size: enemy_sizes.MEDIUM,
 		tags: ["inanimate"],
         stats: {health: 20, attack: 0.000001, agility: 1, dexterity: 1, magic: 0, intuition: 0, attack_speed: 0.000001, defense: 0},
@@ -152,10 +152,32 @@ class Enemy {
         name: "Revenant",
         description: "A corpse, reanimated via unknown means",
         xp_value: 1,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+        tags: ["terror"],
+        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
+    });
+    enemy_templates["Mummy"] = new Enemy({
+        name: "Mummy",
+        description: "A reanimated corpse that looks oddly well-preserved",
+        xp_value: 5,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+        tags: ["terror"],
+        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
+    });
+    enemy_templates["Weak brigand [AXE]"] = new Enemy({
+        name: "Weak brigand [AXE]",
+        description: "An axe-wielding bandit, occupying a low position in a gang's hierarchy",
+        xp_value: 2,
         rank: 1,
 		size: enemy_sizes.MEDIUM,
-        tags: ["undead", "monster"],
-        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
+		weapon: enemy_weapons.AXE,
+        tags: ["human", "bandit"],
+        stats: {health: 110, attack: 16, agility: 8, dexterity: 8, intuition: 6, magic: 0, attack_speed: 0.85, defense: 3},
+        loot_list: [
+            {item_name: "Bandit axe", chance: 0.1},
+        ]
     });
     enemy_templates["Elite wolf rat"] = new Enemy({
         name: "Elite wolf rat",

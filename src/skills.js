@@ -637,7 +637,7 @@ Multiplies attack speed, EP and AP in unarmed combat by ${Math.round((get_total_
 Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                     },
                                     max_level_coefficient: 64, //even with 8x more it's still gonna be worse than just using a weapon lol
-                                    milestones: {
+                                    /*milestones: {
                                         2: {
                                             stats: {
                                                 "strength": {flat: 1},
@@ -686,7 +686,7 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                                 "agility": {flat: 2},
                                             }
                                         },
-                                    }});
+                                    }*/});
 })();
 
 //job skills
@@ -698,6 +698,34 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
 									xp_scaling: 2,
                                     category: "Job",
                                     max_level: 10,
+									milestones: {
+                                    1: {
+                                        stats: {
+                                            "agility": {flat: 1},
+                                        }
+                                    },
+                                    3: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    5: {
+                                        stats: {
+                                            "agility": {flat: 1},
+                                            "dexterity": {flat: 1},
+                                        },
+                                    },
+                                    7: {
+                                        stats: {
+											"agility": {flat: 2},
+                                        }
+                                    },
+                                    10: {
+                                        stats: {
+                                            "agility": {multiplier: 1.05},
+                                        },
+                                    },
+                                },
                                 });
     skills["Recruit"] = new Skill({
                                     names: {0: "Recruit"}, 
@@ -706,6 +734,33 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
 									xp_scaling: 2,
                                     category: "Job",
                                     max_level: 10,
+									milestones: {
+                                    1: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    3: {
+                                        stats: {
+                                            "strength": {flat: 1},
+                                        }
+                                    },
+                                    5: {
+                                        stats: {
+                                            "crit_rate": {flat: 0.01},
+                                        },
+                                    },
+                                    7: {
+                                        stats: {
+											"crit_multiplier": {flat: 0.05},
+                                        }
+                                    },
+                                    10: {
+                                        stats: {
+                                            "defense": {multiplier: 1.05},
+                                        },
+                                    },
+                                },
                                 });
     skills["Journeyman"] = new Skill({
                                     names: {0: "Journeyman"}, 
@@ -714,6 +769,33 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
 									xp_scaling: 2,
                                     category: "Job",
                                     max_level: 10,
+									milestones: {
+                                    1: {
+                                        stats: {
+                                            "strength": {flat: 1},
+                                        }
+                                    },
+                                    3: {
+                                        stats: {
+                                            "max_health": {flat: 10},
+                                        }
+                                    },
+                                    5: {
+                                        stats: {
+                                            "max_health": {flat: 20},
+                                        },
+                                    },
+                                    7: {
+                                        stats: {
+											"strength": {flat: 2},
+                                        }
+                                    },
+                                    10: {
+                                        stats: {
+                                            "max_health": {multiplier: 1.05},
+                                        },
+                                    },
+                                },
                                 });
     skills["Nimrod"] = new Skill({
                                     names: {0: "Nimrod"}, 
@@ -722,6 +804,33 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
 									xp_scaling: 2,
                                     category: "Job",
                                     max_level: 10,
+									milestones: {
+                                    1: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    3: {
+                                        stats: {
+                                            "dexterity": {flat: 1},
+                                        }
+                                    },
+                                    5: {
+                                        stats: {
+                                            "crit_rate": {flat: 0.01},
+                                        },
+                                    },
+                                    7: {
+                                        stats: {
+											"crit_multiplier": {flat: 0.05},
+                                        }
+                                    },
+                                    10: {
+                                        stats: {
+                                            "dexterity": {multiplier: 1.05},
+                                        },
+                                    },
+                                },
                                 });         
                                
 })();
@@ -1135,7 +1244,7 @@ Adds ${skills["Unarmed"].current_level/10} base damage to unarmed attacks`;
                                     return `Multiplies damage dealt with swords by ${Math.round(get_total_skill_coefficient({skill_id:"Swords",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with swords by ${Math.round((get_total_skill_coefficient({skill_id:"Swords",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
-                                milestones: {
+                                /*milestones: {
                                     1: {
                                         stats: {
                                             "dexterity": {flat: 1},
@@ -1168,7 +1277,7 @@ Multiplies AP with swords by ${Math.round((get_total_skill_coefficient({skill_id
                                             "dexterity": {flat: 2},
                                         }
                                     },
-                                },
+                                },*/
                                 max_level_coefficient: 8
                             });
 
@@ -1181,7 +1290,7 @@ Multiplies AP with swords by ${Math.round((get_total_skill_coefficient({skill_id
                                     return `Multiplies damage dealt with axes by ${Math.round(get_total_skill_coefficient({skill_id:"Axes",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"Axes",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
-                                milestones: {
+                                /*milestones: {
                                     1: {
                                         stats: {
                                             "strength": {flat: 1},
@@ -1214,7 +1323,7 @@ Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"
                                             "strength": {flat: 2},
                                         }
                                     },
-                                },
+                                },*/
                                 max_level_coefficient: 8});
 
     skills["Spears"] = new Skill({
@@ -1226,7 +1335,7 @@ Multiplies AP with axes by ${Math.round((get_total_skill_coefficient({skill_id:"
                                     return `Multiplies damage dealt with spears by ${Math.round(get_total_skill_coefficient({skill_id:"Spears",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id:"Spears",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
-                                milestones: {
+                                /*milestones: {
                                     1: {
                                         stats: {
                                             "dexterity": {flat: 1},
@@ -1259,7 +1368,7 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                             "agility": {flat: 2},
                                         }
                                     },
-                                },
+                                },*/
                                 max_level_coefficient: 8
                             });
 
@@ -1272,7 +1381,7 @@ Multiplies AP with spears by ${Math.round((get_total_skill_coefficient({skill_id
                                     return `Multiplies damage dealt with bows by ${Math.round(get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"Bows",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
-                                milestones: {
+                                /*milestones: {
                                     1: {
                                         stats: {
                                             "dexterity": {flat: 1},
@@ -1305,7 +1414,7 @@ Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"
                                             "dexterity": {flat: 2},
                                         }
                                     },
-                                },
+                                },*/
                                 max_level_coefficient: 8
                             });
 
@@ -1318,7 +1427,7 @@ Multiplies AP with bows by ${Math.round((get_total_skill_coefficient({skill_id:"
                                     return `Multiplies damage dealt with daggers by ${Math.round(get_total_skill_coefficient({skill_id:"Daggers",scaling_type:"multiplicative"})*1000)/1000}.
 Multiplies AP with daggers by ${Math.round((get_total_skill_coefficient({skill_id:"Daggers",scaling_type:"multiplicative"})**0.3333)*1000)/1000}`;
                                 },
-                                milestones: {
+                                /*milestones: {
                                     1: {
                                         stats: {
                                             "dexterity": {flat: 1},
@@ -1351,7 +1460,7 @@ Multiplies AP with daggers by ${Math.round((get_total_skill_coefficient({skill_i
                                             "dexterity": {flat: 2},
                                         }
                                     },
-                                },
+                                },*/
                                 max_level_coefficient: 8
                             });
 
@@ -2199,8 +2308,9 @@ Multiplies AP with daggers by ${Math.round((get_total_skill_coefficient({skill_i
         xp_scaling: 1.9,
         max_level: 30,
         max_level_bonus: 30,
+        max_level_coefficient: 1.3,
         get_effect_description: ()=> {
-            return `Increases base defense by ${Math.round(get_total_level_bonus("Iron skin"))}`;
+            return `Gives + ${Math.round(1*skills["Iron skin"].get_level_bonus())} % defense`;
         },
         milestones: {
             3: {

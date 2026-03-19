@@ -1646,6 +1646,27 @@ book_stats["A Glint On The Sand"] = new BookData({
 			"Triangle vs Sword": -2,
         }
     });
+    item_templates["Crude axe head"] = new WeaponComponent({
+        name: "Crude axe head", description: "A crudely-made axe head. Strong, but terrible for fighting",
+        component_type: "axe head",
+        value: 80,
+        name_prefix: "Bandit",
+		set_quality: 100,		
+        component_tier: 0,
+        attack_value: 13,
+        component_stats: {
+            attack_speed: {
+                multiplier: 0.85,
+            },
+            attack_points: {
+                multiplier: 0.75,
+            }
+        },
+        component_bonus_skill_levels: {
+            "Triangle vs Spear": 2,
+			"Triangle vs Sword": -2,
+        }
+    });
     item_templates["PlaceholderHammer"] = new WeaponComponent({
         name: "Nothing", description: "What?!",
         component_type: "other",
@@ -2218,6 +2239,13 @@ book_stats["A Glint On The Sand"] = new BookData({
             handle: "Simple medium handle"
         }
     });
+    item_templates["Bandit axe"] = new Weapon({
+		set_quality: 100,
+        components: {
+            head: "Crude axe head",
+            handle: "Simple medium handle"
+        }
+    });
     /*item_templates["Iron axe"] = new Weapon({
         components: {
             head: "Iron axe head",
@@ -2647,7 +2675,80 @@ book_stats["A Glint On The Sand"] = new BookData({
 
 //clothing (functions both as weak armor and as an armor component) and capes:
 (function(){
-    item_templates["Cheap leather vest"] = new Armor({
+    item_templates["Simple leather cuirass"] = new Armor({
+        name: "Simple leather cuirass", 
+        description: "A simple piece of leather armor that protects one's torso from both attacks and temperature", 
+        value: 200,
+        component_type: "chestplate interior",
+        base_defense: 3,
+		set_quality: 100,
+        component_tier: 1,
+        component_stats: {
+            cold_tolerance: {
+                flat: 2,
+            }
+        }
+    });
+    item_templates["Simple leather leg guards"] = new Armor({
+        name: "Simple leather leg guards", 
+        description: "A simple piece of leather armor that protects one's legs from both attacks and temperature", 
+        value: 180,
+        component_type: "leg armor interior",
+        base_defense: 2,
+		set_quality: 100,
+        component_tier: 1,
+        component_stats: {
+            cold_tolerance: {
+                flat: 1,
+            }
+        }
+    });
+    item_templates["Simple leather boots"] = new Armor({
+        name: "Simple leather boots", 
+        description: "A simple piece of leather armor that protects one's feet from both attacks and temperature", 
+        value: 160,
+        component_type: "shoes interior",
+        base_defense: 1,
+		set_quality: 100,
+        component_tier: 1,
+        component_stats: {
+            agility: {
+                multiplier: 1.05,
+            },
+            cold_tolerance: {
+                flat: 1,
+            }
+        }
+    });
+    item_templates["Simple leather cap"] = new Armor({
+        name: "Simple leather cap", 
+        description: "A simple piece of leather armor that protects one's head from both attacks and temperature", 
+        value: 140,
+        component_type: "helmet interior",
+        base_defense: 1,
+		set_quality: 100,
+        component_tier: 1,
+        component_stats: {
+            cold_tolerance: {
+                flat: 1,
+            }
+        }
+    });
+    item_templates["Simple leather gloves"] = new Armor({
+        name: "Simple leather gloves", 
+        description: "A simple piece of leather armor that protects one's hands from both attacks and temperature", 
+        value: 120,
+        component_type: "glove interior",
+        base_defense: 1,
+		set_quality: 100,
+        component_tier: 1,
+        component_stats: {
+            cold_tolerance: {
+                flat: 1,
+            }
+        }
+    });
+/*    item_templates["Cheap leather vest"] = new Armor({
         name: "Cheap leather vest", 
         description: "Vest providing very low protection. Better not to know what's it made from", 
         value: 100,
@@ -3025,13 +3126,13 @@ book_stats["A Glint On The Sand"] = new BookData({
                 flat: 7,
             }
         }
-    });
+    });*/
 })();
 
 //armors:
 (function(){
     //predefined full (int+ext) armors go here
-    item_templates["Wolf leather armor"] = new Armor({
+/*    item_templates["Wolf leather armor"] = new Armor({
         components: {
             internal: "Leather vest",
             external: "Wolf leather chestplate armor",
@@ -3086,7 +3187,7 @@ book_stats["A Glint On The Sand"] = new BookData({
             internal: "Goat leather pants",
             external: "Steel chainmail greaves",
         }
-    });
+    });*/
 })();
 
 //shield components:

@@ -146,10 +146,11 @@ class TradeItem {
     traders["village trader"] = new Trader({
         name: "village trader",
         inventory_template: "Basic",
-        is_unlocked: false,
+        is_unlocked: true,
         location_name: "Village",
+		profit_margin: 2,
         trade_text: "Trade on the village market",
-        unlock_message: "You can now visit the village market",
+//        unlock_message: "You can now visit the village market",
     });
     traders["suspicious trader"] = new Trader({
         name: "suspicious trader",
@@ -173,6 +174,15 @@ class TradeItem {
     inventory_templates["Basic"] = 
     [
 			new TradeItem({item_name: "Training sword", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Training spear", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Training axe", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Training bow", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Simple leather cuirass", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Simple leather leg guards", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Simple leather boots", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Simple leather cap", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Simple leather gloves", count: [1], quality: [100, 100], chance: 1}),
+			new TradeItem({item_name: "Fresh bread", count: [5,10], chance: 1}),
             /*new TradeItem({item_name: "Cheap iron spear", count: [1], quality: [40, 90], chance: 0.8}),
             new TradeItem({item_name: "Cheap iron dagger", count: [1], quality: [40, 90], chance: 0.8}),
             new TradeItem({item_name: "Cheap iron sword", count: [1], quality: [40, 90], chance: 0.8}),
