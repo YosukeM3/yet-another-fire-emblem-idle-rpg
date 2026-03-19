@@ -76,6 +76,13 @@ class Gathering extends Training {
         base_skills_names: ["Farming"],
         is_unlocked: true,
     });
+    activities["helping"] = new Job({
+        name: "helping",
+        action_text: "Carrying heavy things for the merchant",
+        description: "A job that pays in both money and strength",
+        base_skills_names: ["Weightlifting"],
+        is_unlocked: true,
+    });
     activities["patrolling"] = new Job({
         name: "patrolling",
         action_text: "Patrolling",
@@ -92,13 +99,6 @@ class Gathering extends Training {
         action_text: "Just running around",
         description: "One of the most basic exercises",
         base_skills_names: ["Running"],
-        is_unlocked: true,
-    });
-    activities["weightlifting"] = new Training({
-        name: "weightlifting",
-        action_text: "Carrying heavy things",
-        description: "One of the most basic exercises",
-        base_skills_names: ["Weightlifting"],
         is_unlocked: true,
     });
     activities["balancing"] = new Training({

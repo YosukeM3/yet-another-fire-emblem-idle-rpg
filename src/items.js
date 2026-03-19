@@ -1653,7 +1653,7 @@ book_stats["A Glint On The Sand"] = new BookData({
         name_prefix: "Bandit",
 		set_quality: 100,		
         component_tier: 0,
-        attack_value: 13,
+        attack_value: 9,
         component_stats: {
             attack_speed: {
                 multiplier: 0.85,
@@ -2678,7 +2678,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple leather cuirass"] = new Armor({
         name: "Simple leather cuirass", 
         description: "A simple piece of leather armor that protects one's torso from both attacks and temperature", 
-        value: 200,
+        value: 100,
         component_type: "chestplate interior",
         base_defense: 3,
 		set_quality: 100,
@@ -2692,7 +2692,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple leather leg guards"] = new Armor({
         name: "Simple leather leg guards", 
         description: "A simple piece of leather armor that protects one's legs from both attacks and temperature", 
-        value: 180,
+        value: 90,
         component_type: "leg armor interior",
         base_defense: 2,
 		set_quality: 100,
@@ -2706,7 +2706,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple leather boots"] = new Armor({
         name: "Simple leather boots", 
         description: "A simple piece of leather armor that protects one's feet from both attacks and temperature", 
-        value: 160,
+        value: 80,
         component_type: "shoes interior",
         base_defense: 1,
 		set_quality: 100,
@@ -2723,7 +2723,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple leather cap"] = new Armor({
         name: "Simple leather cap", 
         description: "A simple piece of leather armor that protects one's head from both attacks and temperature", 
-        value: 140,
+        value: 70,
         component_type: "helmet interior",
         base_defense: 1,
 		set_quality: 100,
@@ -2737,7 +2737,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Simple leather gloves"] = new Armor({
         name: "Simple leather gloves", 
         description: "A simple piece of leather armor that protects one's hands from both attacks and temperature", 
-        value: 120,
+        value: 60,
         component_type: "glove interior",
         base_defense: 1,
 		set_quality: 100,
@@ -3590,7 +3590,7 @@ book_stats["A Glint On The Sand"] = new BookData({
 (function(){
     item_templates["Stale bread"] = new UsableItem({
         name: "Stale bread", description: "Big piece of an old bread, still edible",
-        value: 20,
+        value: 10,
         effects: [{effect: "Basic meal", duration: 60}],
         tags: {"food": true},
         material_type: "bread",
@@ -3599,7 +3599,7 @@ book_stats["A Glint On The Sand"] = new BookData({
     item_templates["Fresh bread"] = new UsableItem({
         name: "Fresh bread", 
         description: "Freshly baked bread, delicious",
-        value: 40,
+        value: 20,
         effects: [{effect: "Basic meal", duration: 150}],
         tags: {"food": true},
         material_type: "bread",

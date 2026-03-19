@@ -1104,7 +1104,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
         enemies_list: ["Revenant"],
         types: [{type: "narrow", stage: 1, xp_gain: 1}],
         enemy_count: 10, 
-        enemy_stat_variation: 0.2,
+        enemy_stat_variation: 0.1,
         name: "Forest",
         parent_location: locations["Forest road"],
         first_reward: {
@@ -1155,7 +1155,7 @@ There's another gate on the wall in front of you, but you have a strange feeling
     locations["Forest road"].connected_locations.push({location: locations["Cemetery"], custom_text: "Go to the [Cemetery]", travel_time: 30});
 
     locations["Cave entrance"] = new Location({ 
-        connected_locations: [{location: locations["Forest"], travel_time: 30}],
+        connected_locations: [{location: locations["Forest road"], travel_time: 30}],
         description: "Following the path led you to a cave. While the path continues further, you feel like you should check the cave out before advancing any more.",
         name: "Cave entrance",
         getBackgroundNoises: function() {
@@ -1725,13 +1725,15 @@ There's another gate on the wall in front of you, but you have a strange feeling
             skill_xp_per_tick: 1,
             is_unlocked: false,
         }),
-        "weightlifting": new LocationActivity({
-            activity_name: "weightlifting",
-            infinite: true,
-            starting_text: "Try to carry some bags of grain",
+/*        "weightlifting": new LocationActivity({
+            activity_name: "helping",
+            starting_text: "Help the village merchants carry things",
+            get_payment: () => {return 10},
+			working_period: 60,
+			availability_time: {start: 8, end: 20},
             skill_xp_per_tick: 1,
             is_unlocked: false,
-        }),
+        }),*/
         "swimming": new LocationActivity({
             activity_name: "swimming",
             starting_text: "Swim in the river",

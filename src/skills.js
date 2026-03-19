@@ -1896,12 +1896,12 @@ Multiplies AP with daggers by ${Math.round((get_total_skill_coefficient({skill_i
                         flat: 5
                     }
                 },
-                unlocks: {
+                /*unlocks: {
                             quests: [
                                 "Swimming/climbing unlock",
                                 "Swimming alternative unlock"
                             ]
-                        }
+                        }*/
             }
         },
         get_effect_description: ()=> {
