@@ -881,7 +881,7 @@ function get_location_type_penalty(type, stage, stat, category) {
             }
         ]
     });
-    locations["Village"].connected_locations.push({location: locations["Sparring area"], custom_text: "Spar with kids your age", travel_time: 10});
+    locations["Village"].connected_locations.push({location: locations["Spar 1"], custom_text: "Spar with kids your age", travel_time: 10});
 
     locations["Nearby cave"] = new Location({ 
         connected_locations: [{location: locations["Village"], custom_text: "Go outside and to the [Village]", travel_time: 60}], 
