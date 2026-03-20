@@ -850,6 +850,38 @@ function get_location_type_penalty(type, stage, stat, category) {
         ]
     });
     locations["Village"].connected_locations.push({location: locations["Training area"], travel_time: 5});
+	
+    locations["Spar 1"] = new Combat_zone({
+        description: "Your grandfather set up some training dummies right outside the house.", 
+        enemy_count: 5, 
+        enemies_list: ["Training dummy"],
+//        types: [{type: "open", stage: 1, xp_gain: 1}],
+        enemy_stat_variation: 0,
+        is_unlocked: false, 
+        name: "Sparring with fellow kids", 
+        parent_location: locations["Village"],
+/*        first_reward: {
+            xp: 10,
+            quest_progress: [
+                {quest_id: "Training", task_index: 1},
+            ],
+        },*/
+        repeatable_reward: {
+/*            textlines: [
+                {dialogue: "village elder", lines: ["cleared field"]},
+            ],*/
+            xp: 5,
+        },
+       rewards_with_clear_requirement: [
+            {
+                required_clear_count: 1,
+				textlines: [
+					{dialogue: "Grandfather 2", lines: ["Training finished"]},
+				],
+            }
+        ]
+    });
+    locations["Village"].connected_locations.push({location: locations["Sparring area"], custom_text: "Spar with kids your age", travel_time: 10});
 
     locations["Nearby cave"] = new Location({ 
         connected_locations: [{location: locations["Village"], custom_text: "Go outside and to the [Village]", travel_time: 60}], 
@@ -1725,15 +1757,15 @@ There's another gate on the wall in front of you, but you have a strange feeling
             skill_xp_per_tick: 1,
             is_unlocked: false,
         }),
-/*        "weightlifting": new LocationActivity({
+        "weightlifting": new LocationActivity({
             activity_name: "helping",
+			infinite: true,
             starting_text: "Help the village merchants carry things",
-            get_payment: () => {return 10},
+            get_payment: () => {return 5},
 			working_period: 60,
-			availability_time: {start: 8, end: 20},
             skill_xp_per_tick: 1,
             is_unlocked: false,
-        }),*/
+        }),
         "swimming": new LocationActivity({
             activity_name: "swimming",
             starting_text: "Swim in the river",

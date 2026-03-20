@@ -262,7 +262,7 @@ class DialogueAction extends GameAction {
 						{quest_id: "Training", task_index: 2},
 						{quest_id: "Training", task_index: 3},
 						],
-//                    activities: [{location:"Village", activity:"weightlifting"}],
+                    activities: [{location:"Village", activity:"weightlifting"}],
                 },
                 locks_lines: ["Village guard line 2"],
             }),
