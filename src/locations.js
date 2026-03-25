@@ -852,10 +852,10 @@ function get_location_type_penalty(type, stage, stat, category) {
     locations["Village"].connected_locations.push({location: locations["Training area"], travel_time: 5});
 	
     locations["Spar 1"] = new Combat_zone({
-        description: "Your grandfather set up some training dummies right outside the house.", 
-        enemy_count: 5, 
-        enemies_list: ["Training dummy"],
-//        types: [{type: "open", stage: 1, xp_gain: 1}],
+        description: "You decided to spar with some kids your age", 
+        enemy_count: 1, 
+        enemies_list: ["Gray [SWORD]", "Gareth [SPEAR]", "Ryoma [AXE]", "Akira [BOW]"],
+        types: [{type: "open", stage: 1, xp_gain: 1}],
         enemy_stat_variation: 0,
         is_unlocked: false, 
         name: "Sparring with fellow kids", 
@@ -871,15 +871,13 @@ function get_location_type_penalty(type, stage, stat, category) {
                 {dialogue: "village elder", lines: ["cleared field"]},
             ],*/
             xp: 5,
+        skill_xp: {
+            "Combat": 10 //flat value
+            },
+        skill_xp: {
+            "Iron skin": 10 //flat value
+            },
         },
-       rewards_with_clear_requirement: [
-            {
-                required_clear_count: 1,
-				textlines: [
-					{dialogue: "Grandfather 2", lines: ["Training finished"]},
-				],
-            }
-        ]
     });
     locations["Village"].connected_locations.push({location: locations["Spar 1"], custom_text: "Spar with kids your age", travel_time: 10});
 
@@ -1140,10 +1138,10 @@ There's another gate on the wall in front of you, but you have a strange feeling
         name: "Forest",
         parent_location: locations["Forest road"],
         first_reward: {
-            xp: 20,
+            xp: 30,
         },
         repeatable_reward: {
-            xp: 10,
+            xp: 15,
 //            locations: [{location:"Deep forest"}],
 //            activities: [{location:"Forest road", activity: "herbalism"}],
         },
@@ -1170,10 +1168,10 @@ There's another gate on the wall in front of you, but you have a strange feeling
         name: "Cemetery", 
         parent_location: locations["Forest road"],
         first_reward: {
-            xp: 30,
+            xp: 40,
         },
         repeatable_reward: {
-            xp: 15,
+            xp: 20,
 //            flags: ["is_strength_proved"],
 //            activities: [{location:"Forest road", activity: "woodcutting"}],
         },
@@ -1211,10 +1209,10 @@ There's another gate on the wall in front of you, but you have a strange feeling
         leave_text: "Run away for now",
         parent_location: locations["Cave entrance"],
         first_reward: {
-            xp: 50,
+            xp: 60,
         },
 		repeatable_reward: {
-			xp: 25,
+			xp: 30,
 		},
     });
 

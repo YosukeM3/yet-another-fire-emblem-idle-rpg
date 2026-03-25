@@ -142,39 +142,78 @@ class Enemy {
         name: "Training dummy",
         description: "A training dummy set up by your grandfather. Doesn't hit back",
         xp_value: 1,
-        rank: 3,
+        rank: 4,
         size: enemy_sizes.MEDIUM,
 		tags: ["inanimate"],
         stats: {health: 20, attack: 0.000001, agility: 1, dexterity: 1, magic: 0, intuition: 0, attack_speed: 0.000001, defense: 0},
     });
-
     enemy_templates["Revenant"] = new Enemy({
         name: "Revenant",
         description: "A corpse, reanimated via unknown means",
-        xp_value: 1,
-        rank: 2,
+        xp_value: 2,
+        rank: 3,
 		size: enemy_sizes.MEDIUM,
         tags: ["terror"],
-        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
+        stats: {health: 70, attack: 10, agility: 7, dexterity: 8, intuition: 7, magic: 0, attack_speed: 0.8, defense: 1},
     });
     enemy_templates["Mummy"] = new Enemy({
         name: "Mummy",
         description: "A reanimated corpse that looks oddly well-preserved",
-        xp_value: 5,
-        rank: 2,
+        xp_value: 6,
+        rank: 3,
 		size: enemy_sizes.MEDIUM,
         tags: ["terror"],
-        stats: {health: 70, attack: 10, agility: 7, dexterity: 7, intuition: 6, magic: 0, attack_speed: 0.8, defense: 1},
+        stats: {health: 70, attack: 10, agility: 7, dexterity: 8, intuition: 7, magic: 0, attack_speed: 0.8, defense: 1},
+    });
+    enemy_templates["Gray [SWORD]"] = new Enemy({
+        name: "Gray [SWORD]",
+        description: "An easygoing kid your age. Recently began training to be a swordsman",
+        xp_value: 1,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+		weapon: enemy_weapons.SWORD,
+        tags: ["human"],
+        stats: {health: 55, attack: 4, agility: 12, dexterity: 13, intuition: 9, magic: 0, attack_speed: 1.05, defense: 0},
+    });
+    enemy_templates["Gareth [SPEAR]"] = new Enemy({
+        name: "Gareth [SPEAR]",
+        description: "A dedicated kid your age. Recently began practicing with a spear",
+        xp_value: 1,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+		weapon: enemy_weapons.SPEAR,
+        tags: ["human"],
+        stats: {health: 55, attack: 5, agility: 10, dexterity: 11, intuition: 8, magic: 0, attack_speed: 1, defense: 2},
+    });
+    enemy_templates["Ryoma [AXE]"] = new Enemy({
+        name: "Ryoma [AXE]",
+        description: "A hot-blooded kid your age. Recently began walking the path of the axe",
+        xp_value: 1,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+		weapon: enemy_weapons.AXE,
+        tags: ["human"],
+        stats: {health: 60, attack: 6, agility: 8, dexterity: 9, intuition: 8, magic: 0, attack_speed: 0.95, defense: 1},
+    });
+    enemy_templates["Akira [BOW]"] = new Enemy({
+        name: "Akira [BOW]",
+        description: "A kid your age with a powerful voice. Recently began using a bow",
+        xp_value: 1,
+        rank: 2,
+		size: enemy_sizes.MEDIUM,
+		weapon: enemy_weapons.SWORD,
+        tags: ["human"],
+        stats: {health: 50, attack: 5, agility: 10, dexterity: 14, intuition: 9, magic: 0, attack_speed: 1, defense: 0},
     });
     enemy_templates["Weak brigand [AXE]"] = new Enemy({
         name: "Weak brigand [AXE]",
         description: "An axe-wielding bandit, occupying a low position in a gang's hierarchy",
-        xp_value: 2,
+        xp_value: 3,
         rank: 1,
 		size: enemy_sizes.MEDIUM,
 		weapon: enemy_weapons.AXE,
         tags: ["human", "bandit"],
-        stats: {health: 110, attack: 16, agility: 8, dexterity: 8, intuition: 6, magic: 0, attack_speed: 0.85, defense: 3},
+        stats: {health: 110, attack: 16, agility: 8, dexterity: 9, intuition: 8, magic: 0, attack_speed: 0.85, defense: 3},
         loot_list: [
             {item_name: "Bandit axe", chance: 0.1},
         ]

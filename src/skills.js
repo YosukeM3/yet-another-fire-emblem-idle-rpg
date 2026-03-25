@@ -1817,12 +1817,12 @@ Multiplies AP with daggers by ${Math.round((get_total_skill_coefficient({skill_i
                 xp_multipliers: {
                     "Breathing": 1.05,
                 },
-                unlocks: {
+                /*unlocks: {
                             quests: [
                                 "Swimming/climbing unlock",
                                 "Swimming alternative unlock"
                             ]
-                        }
+                        }*/
             }
         },
         get_effect_description: ()=> {
